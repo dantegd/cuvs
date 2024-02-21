@@ -17,6 +17,8 @@
 
 import numpy as np
 
+cimport stdlib
+
 
 cdef void deleter(DLManagedTensor* tensor):
     if tensor.manager_ctx is NULL:

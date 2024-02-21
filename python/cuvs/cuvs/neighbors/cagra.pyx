@@ -112,8 +112,8 @@ cdef class Index:
             raise Exception("FAIL")
 
     def __dealloc__(self):
+        cdef cuvsError_t index_destroy_status
         if self.index is not NULL:
-            cdef cuvsError_t index_destroy_status
             index_destroy_status = cagraIndexDestroy(&self.index)
             if index_destroy_status == cagra_c.cuvsError_t.CUVS_ERROR:
                 raise Exception("FAIL")

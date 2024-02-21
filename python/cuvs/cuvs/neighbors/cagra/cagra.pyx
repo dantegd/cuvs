@@ -19,7 +19,7 @@ import numpy as np
 cimport cuvs.common.cydlpack
 
 from cuvs.common.temp_raft import auto_sync_resources
-from cuvs.common.cydlpack cimport dplack_c
+from cuvs.common cimport cydlpack
 
 from cython.operator cimport dereference as deref
 
@@ -192,7 +192,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
         build_status = cagra_c.cagraBuild(
             deref(resources_),
             index_params.params,
-            <DLManagedTensor*> &dplack_c(dataset_ai),
+            <cydlpack.DLManagedTensor*> &cydlpack(dataset_ai),
             deref(idx.index)
         )
 
@@ -463,9 +463,9 @@ def search(SearchParams search_params,
             <cuvsResources_t> resources_,
             params,
             deref(idx_float.index),
-            <DLManagedTensor*> dplack_c(queries_cai),
-            <DLManagedTensor*> dplack_c(neighbors_cai),
-            <DLManagedTensor*> dplack_c(distances_cai)
+            <cydlpack.DLManagedTensor*> cydlpack(queries_cai),
+            <cydlpack.DLManagedTensor*> cydlpack(neighbors_cai),
+            <cydlpack.DLManagedTensor*> cydlpack(distances_cai)
         )
 
     return (distances, neighbors)

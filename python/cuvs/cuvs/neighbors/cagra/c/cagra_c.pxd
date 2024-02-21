@@ -16,7 +16,6 @@
 # cython: language_level=3
 
 from libc.stdint cimport int8_t, int64_t, uint8_t, uint32_t, uint64_t, uintptr_t
-from cuda.ccudart cimport cudaStream_t
 
 from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 

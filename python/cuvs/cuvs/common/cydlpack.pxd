@@ -63,6 +63,6 @@ cdef extern from 'dlpack.h' nogil:
     ctypedef struct DLManagedTensor:
         DLTensor dl_tensor
         void* manager_ctx
-        void (*deleter)(DLManagedTensor*) noexcept # noqa: E211
+        void (*deleter)(DLManagedTensor*)  # noqa: E211
 
 

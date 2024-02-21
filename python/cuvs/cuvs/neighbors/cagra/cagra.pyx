@@ -461,7 +461,7 @@ def search(SearchParams search_params,
         cagra_c.cagraSearch(
             <cuvsResources_t> resources_,
             params,
-            idx_float.index,
+            index.index,
             <cydlpack.DLManagedTensor*> cydlpack(queries_cai),
             <cydlpack.DLManagedTensor*> cydlpack(neighbors_cai),
             <cydlpack.DLManagedTensor*> cydlpack(distances_cai)

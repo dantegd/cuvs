@@ -18,7 +18,7 @@
 from libc.stdint cimport int8_t, int64_t, uint8_t, uint32_t, uint64_t
 
 
-cdef extern from "cuvs/core/c_api.h"
+cdef extern from "cuvs/core/c_api.h":
     ctypedef uintptr_t cuvsResources_t
 
     ctypedef enum cuvsError_t:

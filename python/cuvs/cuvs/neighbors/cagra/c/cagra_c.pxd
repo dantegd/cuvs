@@ -21,18 +21,6 @@ from cuda.ccudart cimport cudaStream_t
 from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 
 
-cdef extern from "cuvs/core/c_api.h":
-    ctypedef uintptr_t cuvsResources_t
-
-    ctypedef enum cuvsError_t:
-        CUVS_ERROR,
-        CUVS_SUCCESS
-
-    cuvsError_t cuvsResourcesCreate(cuvsResources_t* res)
-    cuvsError_t cuvsResourcesDestroy(cuvsResources_t res)
-    cuvsError_t cuvsStreamSet(cuvsResources_t res, cudaStream_t stream)
-
-
 cdef extern from "cuvs/neighbors/cagra_c.h" nogil:
 
     ctypedef enum cagraGraphBuildAlgo:

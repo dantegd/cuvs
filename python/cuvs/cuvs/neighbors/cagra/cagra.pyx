@@ -17,6 +17,7 @@
 
 import numpy as np
 cimport cuvs.common.cydlpack
+from cuvs.common.c_api cimport cuvsError_t
 
 from cuvs.common.temp_raft import auto_sync_resources
 from cuvs.common.cydlpack import dplack_c
@@ -99,10 +100,10 @@ cdef class IndexParams:
 
 
 cdef class Index:
-    cdef cagraIndex_t index
+    cdef cagra_c.cagraIndex_t index
 
     def __cinit__(self):
-        cdef cuvsError_t index_create_status
+        cdef cagra_c.cuvsError_t index_create_status
         index_create_status = cuvsCagraIndexCreate(&self.index)
         self.trained = False
 

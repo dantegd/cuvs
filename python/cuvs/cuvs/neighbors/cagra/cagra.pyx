@@ -463,9 +463,9 @@ def search(SearchParams search_params,
             <cuvsResources_t> resources_,
             params,
             deref(idx_float.index),
-            <DLManagedTensor*> &dplack_c(queries_cai),
-            <DLManagedTensor*> &dplack_c(neighbors_cai),
-            <DLManagedTensor*> &dplack_c(distances_cai)
+            <DLManagedTensor*> dplack_c(queries_cai),
+            <DLManagedTensor*> dplack_c(neighbors_cai),
+            <DLManagedTensor*> dplack_c(distances_cai)
         )
 
     return (distances, neighbors)

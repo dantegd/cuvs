@@ -32,8 +32,6 @@ from pylibraft.common import (
 from pylibraft.common.cai_wrapper import wrap_array
 from pylibraft.common.interruptible import cuda_interruptible
 
-cimport cuvs.neighbors.cagra.c.cagra_c as cagra_c
-
 from pylibraft.neighbors.common import _check_input_array
 
 

@@ -81,7 +81,7 @@ cdef extern from "cuvs/neighborscagra_c.h" nogil:
     cuvsError_t cagraIndexDestroy(cagraIndex_t index)
 
     cuvsError_t cagraBuild(cuvsResources_t res,
-                           struct cagraIndexParams params,
+                           cagraIndexParams params,
                            DLManagedTensor* dataset,
                            cagraIndex_t index);
 

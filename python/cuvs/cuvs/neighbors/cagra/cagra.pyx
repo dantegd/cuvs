@@ -57,7 +57,7 @@ cdef class IndexParams:
               building the knn graph. It is expected to be generally
               faster than ivf_pq.
     """
-    cdef cagra_c.index_params params
+    cdef cagra_c.cagraIndexParams params
 
     def __init__(self, *,
                  metric="sqeuclidean",

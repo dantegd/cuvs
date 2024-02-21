@@ -1,1 +1,1 @@
-cimport cuvs.neighbors.c.cagra_c as cagra_c
+cimport cuvs.neighbors.cagra.c.cagra_c as cagra_c

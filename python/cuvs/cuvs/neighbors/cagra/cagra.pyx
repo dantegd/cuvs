@@ -191,8 +191,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
         build_status = cagra_c.cagraBuild(
             deref(resources_),
             index_params.params,
-            <cydlpack.DLManagedTensor*> &cydlpack(dataset_ai),
-            deref(idx.index)
+            <cydlpack.DLManagedTensor*> &cydlpack.dlpack_c(dataset_ai),
+            idx.index
         )
 
         if build_status == cagra_c.cuvsError_t.CUVS_ERROR:

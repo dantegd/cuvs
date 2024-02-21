@@ -423,7 +423,6 @@ def search(SearchParams search_params,
     >>> neighbors = cp.asarray(neighbors)
     >>> distances = cp.asarray(distances)
     """
-
     if not index.trained:
         raise ValueError("Index need to be built before calling search.")
 

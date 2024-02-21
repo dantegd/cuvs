@@ -33,6 +33,7 @@ from pylibraft.common.cai_wrapper import wrap_array
 from pylibraft.common.interruptible import cuda_interruptible
 
 from pylibraft.neighbors.common import _check_input_array
+from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t
 
 
 cdef class IndexParams:
@@ -102,18 +103,18 @@ cdef class Index:
     cdef cagra_c.cagraIndex_t index
 
     def __cinit__(self):
-        cdef cagra_c.cuvsError_t index_create_status
+        cdef cuvsError_t index_create_status
         index_create_status = cuvsCagraIndexCreate(&self.index)
         self.trained = False
 
-        if index_create_status == cagra_c.cuvsError_t.CUVS_ERROR:
+        if index_create_status == cuvsError_t.CUVS_ERROR:
             raise Exception("FAIL")
 
     def __dealloc__(self):
         cdef cuvsError_t index_destroy_status
         if self.index is not NULL:
             index_destroy_status = cagraIndexDestroy(&self.index)
-            if index_destroy_status == cagra_c.cuvsError_t.CUVS_ERROR:
+            if index_destroy_status == cuvsError_t.CUVS_ERROR:
                 raise Exception("FAIL")
             del self.index
 
@@ -249,7 +250,7 @@ cdef class SearchParams:
     rand_xor_mask: int, default = 0x128394
         Bit mask used for initial random seed node selection.
     """
-    cdef cagra_c.search_params params
+    cdef cagra_c.cagraSearchParams params
 
     def __init__(self, *,
                  max_queries=0,

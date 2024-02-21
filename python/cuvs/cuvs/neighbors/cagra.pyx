@@ -184,10 +184,9 @@ def build_index(IndexParams index_params, dataset, resources=None):
         <cuvsResources_t*><size_t>handle.getHandle()
 
     cdef Index idx = Index()
+    cdef cuvsError_t build_status
 
     with cuda_interruptible():
-        cdef cuvsError_t build_status
-
         build_status = cagra_c.cagraBuild(
             deref(resources_),
             index_params.params,

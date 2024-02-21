@@ -17,7 +17,7 @@
 
 import numpy as np
 
-cimport stdlib
+from libc cimport stdlib
 
 
 cdef void deleter(DLManagedTensor* tensor):

@@ -107,7 +107,7 @@ cdef class Index:
 
     def __cinit__(self):
         cdef cuvsError_t index_create_status
-        index_create_status = cagra_c.cuvsCagraIndexCreate(&self.index)
+        index_create_status = cagra_c.cagraIndexCreate(&self.index)
         self.trained = False
 
         if index_create_status == cuvsError_t.CUVS_ERROR:
@@ -116,10 +116,9 @@ cdef class Index:
     def __dealloc__(self):
         cdef cuvsError_t index_destroy_status
         if self.index is not NULL:
-            index_destroy_status = cagra_c.cagraIndexDestroy(&self.index)
+            index_destroy_status = cagra_c.cagraIndexDestroy(self.index)
             if index_destroy_status == cuvsError_t.CUVS_ERROR:
                 raise Exception("FAIL")
-            del self.index
 
     def __repr__(self):
         # todo(dgd): update repr as we expose data through C API

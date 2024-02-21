@@ -36,6 +36,8 @@ from pylibraft.neighbors.common import _check_input_array
 from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t
 from pylibraft.common.handle cimport device_resources
 
+from libc.stdint cimport int8_t, int64_t, uint8_t, uint32_t, uint64_t, uintptr_t
+
 
 cdef class IndexParams:
     """

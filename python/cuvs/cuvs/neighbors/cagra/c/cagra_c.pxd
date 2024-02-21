@@ -19,7 +19,7 @@ from libc.stdint cimport int8_t, int64_t, uint8_t, uint32_t, uint64_t, uintptr_t
 
 from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 
-from cuvs.common.c_api cimport cuvsError_t
+from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t
 
 
 cdef extern from "cuvs/neighbors/cagra_c.h" nogil:

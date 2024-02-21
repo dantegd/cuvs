@@ -71,7 +71,7 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.dtype = dtype
 
     dlm.dl_tensor = tensor
-    dlm.manager_ct = NULL
+    dlm.manager_ctx = NULL
     dlm.deleter = deleter
 
     return dlm

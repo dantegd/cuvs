@@ -371,7 +371,7 @@ def search(SearchParams search_params,
            neighbors=None,
            distances=None,
            resources=None):
-     """
+    """
     Find the k nearest neighbors for each query.
 
     Parameters

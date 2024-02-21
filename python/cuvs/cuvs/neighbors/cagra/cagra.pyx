@@ -460,7 +460,7 @@ def search(SearchParams search_params,
 
     with cuda_interruptible():
         cagra_c.cagraSearch(
-            deref(resources_),
+            <cuvsResources_t> resources_,
             params,
             deref(idx_float.index),
             <DLManagedTensor*> &dplack_c(queries_cai),

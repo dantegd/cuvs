@@ -20,6 +20,8 @@ from cuda.ccudart cimport cudaStream_t
 
 from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 
+from cuvs.common.c_api cimport cuvsError_t
+
 
 cdef extern from "cuvs/neighbors/cagra_c.h" nogil:
 

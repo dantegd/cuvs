@@ -17,7 +17,6 @@
 
 import numpy as np
 cimport cuvs.common.cydlpack
-from cuvs.common.c_api cimport cuvsError_t
 
 from cuvs.common.temp_raft import auto_sync_resources
 from cuvs.common.cydlpack import dplack_c

@@ -15,7 +15,10 @@
 #
 # cython: language_level=3
 
-from libc.stdint cimport int8_t, int64_t, uint8_t, uint32_t, uint64_t
+from libc.stdint cimport int8_t, int64_t, uint8_t, uint32_t, uint64_t, uintptr_t
+from cuda.ccudart cimport cudaStream_t
+
+from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 
 
 cdef extern from "cuvs/core/c_api.h":
@@ -30,7 +33,7 @@ cdef extern from "cuvs/core/c_api.h":
     cuvsError_t cuvsStreamSet(cuvsResources_t res, cudaStream_t stream)
 
 
-cdef extern from "cuvs/neighborscagra_c.h" nogil:
+cdef extern from "cuvs/neighbors/cagra_c.h" nogil:
 
     ctypedef enum cagraGraphBuildAlgo:
         IVF_PQ
@@ -44,7 +47,7 @@ cdef extern from "cuvs/neighborscagra_c.h" nogil:
         size_t nn_descent_niter
 
 
-    ctypedef enum search_algo:
+    ctypedef enum cagraSearchAlgo:
         SINGLE_CTA,
         MULTI_CTA,
         MULTI_KERNEL,

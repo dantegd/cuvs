@@ -195,7 +195,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
             deref(idx.index)
         )
 
-        if index_destroy_status == cagra_c.cuvsError_t.CUVS_ERROR:
+        if build_status == cagra_c.cuvsError_t.CUVS_ERROR:
             raise RuntimeError("Index failed to build.")
         else:
             idx.trained = True
@@ -291,7 +291,7 @@ cdef class SearchParams:
         elif hashmap_mode == "small":
             self.params.hashmap_mode = cagra_c.cagraHashMode.SMALL
         elif hashmap_mode == "auto":
-            self.params.hashmap_mode = cagra_c.cagraHashMode.AUTO
+            self.params.hashmap_mode = cagra_c.cagraHashMode.AUTO_HASH
         else:
             raise ValueError("`hashmap_mode` value not supported.")
 
@@ -461,7 +461,7 @@ def search(SearchParams search_params,
         cagra_c.cagraSearch(
             <cuvsResources_t> resources_,
             params,
-            deref(idx_float.index),
+            idx_float.index,
             <cydlpack.DLManagedTensor*> cydlpack(queries_cai),
             <cydlpack.DLManagedTensor*> cydlpack(neighbors_cai),
             <cydlpack.DLManagedTensor*> cydlpack(distances_cai)

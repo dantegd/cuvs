@@ -186,13 +186,13 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status
-    cdef cydlpack.DLManagedTensor* dataset_dlpack = &cydlpack.dlpack_c(dataset_ai)
+    cdef cydlpack.DLManagedTensor dataset_dlpack = cydlpack.dlpack_c(dataset_ai)
 
     with cuda_interruptible():
         build_status = cagra_c.cagraBuild(
             deref(resources_),
             index_params.params,
-            dataset_dlpack,
+            &dataset_dlpack,
             idx.index
         )
 

@@ -457,15 +457,18 @@ def search(SearchParams search_params,
                        exp_rows=n_queries, exp_cols=k)
 
     cdef cagra_c.cagraSearchParams params = search_params.params
+    cdef cydlpack.DLManagedTensor queries_dlpack = cydlpack.dlpack_c(queries_cai)
+    cdef cydlpack.DLManagedTensor neighbors_dlpack = cydlpack.dlpack_c(neighbors_cai)
+    cdef cydlpack.DLManagedTensor distances_dlpack = cydlpack.dlpack_c(distances_cai)
 
     with cuda_interruptible():
         cagra_c.cagraSearch(
             <cuvsResources_t> resources_,
             params,
             index.index,
-            <cydlpack.DLManagedTensor*> cydlpack(queries_cai),
-            <cydlpack.DLManagedTensor*> cydlpack(neighbors_cai),
-            <cydlpack.DLManagedTensor*> cydlpack(distances_cai)
+            &queries_dlpack,
+            &neighbors_dlpack,
+            &distances_dlpack
         )
 
     return (distances, neighbors)

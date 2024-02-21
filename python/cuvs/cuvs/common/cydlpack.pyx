@@ -20,7 +20,7 @@ import numpy as np
 from libc cimport stdlib
 
 
-cdef void deleter(DLManagedTensor* tensor) no except:
+cdef void deleter(DLManagedTensor* tensor) noexcept:
     if tensor.manager_ctx is NULL:
         return
     stdlib.free(tensor.dl_tensor.shape)

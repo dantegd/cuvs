@@ -107,7 +107,7 @@ cdef class Index:
 
     def __cinit__(self):
         cdef cuvsError_t index_create_status
-        index_create_status = cuvsCagraIndexCreate(&self.index)
+        index_create_status = cagra_c.cuvsCagraIndexCreate(&self.index)
         self.trained = False
 
         if index_create_status == cuvsError_t.CUVS_ERROR:
@@ -116,7 +116,7 @@ cdef class Index:
     def __dealloc__(self):
         cdef cuvsError_t index_destroy_status
         if self.index is not NULL:
-            index_destroy_status = cagraIndexDestroy(&self.index)
+            index_destroy_status = cagra_c.cagraIndexDestroy(&self.index)
             if index_destroy_status == cuvsError_t.CUVS_ERROR:
                 raise Exception("FAIL")
             del self.index
@@ -183,7 +183,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     if resources is None:
         resources = DeviceResources()
     cdef cuvsResources_t* resources_ = \
-        <cuvsResources_t*><size_t>handle.getHandle()
+        <cuvsResources_t*><size_t>resources.getHandle()
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status
@@ -456,7 +456,7 @@ def search(SearchParams search_params,
     _check_input_array(distances_cai, [np.dtype('float32')],
                        exp_rows=n_queries, exp_cols=k)
 
-    cdef cagra_c.search_params params = search_params.params
+    cdef cagra_c.cagraSearchParams params = search_params.params
 
     with cuda_interruptible():
         cagra_c.cagraSearch(

@@ -364,7 +364,6 @@ cdef class SearchParams:
     def rand_xor_mask(self):
         return self.params.rand_xor_mask
 
-
 # @auto_sync_resources
 # @auto_convert_output
 # def search(SearchParams search_params,

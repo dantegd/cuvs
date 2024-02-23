@@ -192,7 +192,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     with cuda_interruptible():
         build_status = cagra_c.cagraBuild(
             deref(resources_),
-            index_params.params,
+            params,
             &dataset_dlpack,
             idx.index
         )

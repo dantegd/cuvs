@@ -146,7 +146,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     index_params : IndexParams object
     dataset : CUDA array interface compliant matrix shape (n_samples, dim)
         Supported dtype [float, int8, uint8]
-    {handle_docstring}
+    {resources_docstring}
 
     Returns
     -------
@@ -392,7 +392,7 @@ cdef class SearchParams:
 #     distances : Optional CUDA array interface compliant matrix shape
 #                 (n_queries, k) If supplied, the distances to the
 #                 neighbors will be written here in-place. (default None)
-#     {handle_docstring}
+#     {resources_docstring}
 
 #     Examples
 #     --------

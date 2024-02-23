@@ -187,6 +187,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     cdef Index idx = Index()
     cdef cuvsError_t build_status
     cdef cydlpack.DLManagedTensor dataset_dlpack = cydlpack.dlpack_c(dataset_ai)
+    cdef cagra_c.cagraIndexParams* params = &index_params.params
 
     with cuda_interruptible():
         build_status = cagra_c.cagraBuild(
@@ -456,7 +457,7 @@ def search(SearchParams search_params,
     _check_input_array(distances_cai, [np.dtype('float32')],
                        exp_rows=n_queries, exp_cols=k)
 
-    cdef cagra_c.cagraSearchParams params = search_params.params
+    cdef cagra_c.cagraSearchParams* params = &search_params.params
     cdef cydlpack.DLManagedTensor queries_dlpack = cydlpack.dlpack_c(queries_cai)
     cdef cydlpack.DLManagedTensor neighbors_dlpack = cydlpack.dlpack_c(neighbors_cai)
     cdef cydlpack.DLManagedTensor distances_dlpack = cydlpack.dlpack_c(distances_cai)

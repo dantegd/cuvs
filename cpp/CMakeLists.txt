@@ -55,7 +55,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_SHARED_LIBS "Build cuvs shared libraries" ON)
 option(BUILD_TESTS "Build cuvs unit-tests" ON)
-option(BUILD_C_LIBRARY "Build raft C API library" OFF)
+option(BUILD_C_LIBRARY "Build raft C API library" ON)
 option(BUILD_C_TESTS "Build raft C API tests" OFF)
 option(CUDA_ENABLE_KERNELINFO "Enable kernel resource usage info" OFF)
 option(CUDA_ENABLE_LINEINFO

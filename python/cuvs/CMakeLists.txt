@@ -47,6 +47,7 @@ else()
 endif()
 
 include(rapids-cython-core)
+include(../../cmake/thirdparty/get_dlpack.cmake)
 
 if(NOT cuvs_FOUND)
   set(BUILD_TESTS OFF)

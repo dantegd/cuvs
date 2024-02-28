@@ -441,8 +441,8 @@ def search(SearchParams search_params,
 
     if resources is None:
         resources = DeviceResources()
-    cdef device_resources* resources_ = \
-        <device_resources*><size_t>resources.getHandle()
+    cdef cuvsResources_t* resources_ = \
+        <cuvsResources_t*><size_t>resources.getHandle()
 
     # todo(dgd): we can make the check of dtype a parameter of wrap_array
     # in RAFT to make this a single call

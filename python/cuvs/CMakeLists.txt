@@ -45,7 +45,7 @@ include(rapids-cython-core)
 
 # If the user requested it we attempt to find CUVS.
 if(FIND_CUVS_CPP)
-  find_package(cuvs_c ${cuvs_version})
+  find_package(cuvs ${cuvs_version})
 else()
   set(cuvs_FOUND OFF)
 endif()

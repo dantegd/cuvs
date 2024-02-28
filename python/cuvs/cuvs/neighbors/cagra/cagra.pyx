@@ -484,8 +484,6 @@ def search(SearchParams search_params,
         )
 
         if search_status == cuvsError_t.CUVS_ERROR:
-            raise RuntimeError("Index failed to build.")
-        else:
-            idx.trained = True
+            raise RuntimeError("Search failed.")
 
     return (distances, neighbors)

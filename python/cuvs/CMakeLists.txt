@@ -39,6 +39,10 @@ option(FIND_CUVS_CPP "Search for existing CUVS C++ installations before defaulti
 
 message("- FIND_CUVS_CPP: ${FIND_CUVS_CPP}")
 
+include(rapids-cmake)
+include(rapids-cpm)
+include(rapids-cython-core)
+
 # If the user requested it we attempt to find CUVS.
 if(FIND_CUVS_CPP)
   find_package(cuvs_c ${cuvs_version})
@@ -46,7 +50,6 @@ else()
   set(cuvs_FOUND OFF)
 endif()
 
-include(rapids-cython-core)
 include(../../cpp/cmake/thirdparty/get_dlpack.cmake)
 
 if(NOT cuvs_FOUND)

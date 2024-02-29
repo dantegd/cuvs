@@ -32,15 +32,15 @@ namespace {
 template <typename T>
 void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* dataset_tensor)
 {
-  std::cout << "cagra_c.cpp 1"
+  std::cout << "cagra_c.cpp 1" << std::endl;
   auto dataset = dataset_tensor->dl_tensor;
 
-  std::cout << "cagra_c.cpp 2"
+  std::cout << "cagra_c.cpp 2" << std::endl;
   auto res_ptr = reinterpret_cast<raft::resources*>(res);
-  std::cout << "cagra_c.cpp 3"
+  std::cout << "cagra_c.cpp 3" << std::endl;
   auto index   = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
 
-  std::cout << "cagra_c.cpp 4"
+  std::cout << "cagra_c.cpp 4" << std::endl;
   auto build_params                      = cuvs::neighbors::cagra::index_params();
   build_params.intermediate_graph_degree = params.intermediate_graph_degree;
   build_params.graph_degree              = params.graph_degree;
@@ -50,12 +50,12 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
 
   if (cuvs::core::is_dlpack_device_compatible(dataset)) {
     using mdspan_type = raft::device_matrix_view<T const, int64_t, raft::row_major>;
-    std::cout << "cagra_c.cpp 5"
+    std::cout << "cagra_c.cpp 5" << std::endl;
     auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
   } else if (cuvs::core::is_dlpack_host_compatible(dataset)) {
     using mdspan_type = raft::host_matrix_view<T const, int64_t, raft::row_major>;
-    std::cout << "cagra_c.cpp 6"
+    std::cout << "cagra_c.cpp 6" << std::endl;
     auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }

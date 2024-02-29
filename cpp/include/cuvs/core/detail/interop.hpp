@@ -100,12 +100,15 @@ MdspanType from_dlpack(DLManagedTensor* managed_tensor)
   RAFT_EXPECTS(MdspanType::extents_type::rank() == tensor.ndim,
                "ndim mismatch between return mdspan and DLTensor");
 
+  std::cout << "CJ" << std::endl;
   // auto exts = typename MdspanType::extents_type{tensor.shape};
   std::array<int64_t, MdspanType::extents_type::rank()> shape{};
+  std::cout << "CK" << std::endl;
   for (int64_t i = 0; i < tensor.ndim; ++i) {
     shape[i] = tensor.shape[i];
   }
   auto exts = typename MdspanType::extents_type{shape};
+  std::cout << "CL" << std::endl;
 
   return MdspanType{reinterpret_cast<typename MdspanType::data_handle_type>(tensor.data), exts};
 }

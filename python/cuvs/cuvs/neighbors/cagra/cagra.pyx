@@ -475,7 +475,7 @@ def search(SearchParams search_params,
 
     # todo(dgd): we can make the check of dtype a parameter of wrap_array
     # in RAFT to make this a single call
-    queries_cai = cai_wrapper(queries)
+    queries_cai = wrap_array(queries)
     _check_input_array(queries_cai, [np.dtype('float32'), np.dtype('byte'),
                                      np.dtype('ubyte')])
 
@@ -484,14 +484,14 @@ def search(SearchParams search_params,
     if neighbors is None:
         neighbors = device_ndarray.empty((n_queries, k), dtype='uint32')
 
-    neighbors_cai = cai_wrapper(neighbors)
+    neighbors_cai = wrap_array(neighbors)
     _check_input_array(neighbors_cai, [np.dtype('uint32')],
                        exp_rows=n_queries, exp_cols=k)
 
     if distances is None:
         distances = device_ndarray.empty((n_queries, k), dtype='float32')
 
-    distances_cai = cai_wrapper(distances)
+    distances_cai = wrap_array(distances)
     _check_input_array(distances_cai, [np.dtype('float32')],
                        exp_rows=n_queries, exp_cols=k)
 

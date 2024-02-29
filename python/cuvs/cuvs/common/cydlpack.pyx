@@ -35,7 +35,7 @@ cdef DLManagedTensor* dlpack_c(ary):
     cdef DLDevice dev
     cdef DLDataType dtype
     cdef DLTensor tensor
-    cdef DLManagedTensor* dlm_tensor = \
+    cdef DLManagedTensor* dlm = \
         <DLManagedTensor*>stdlib.malloc(sizeof(DLManagedTensor))
 
     if ary.from_cai:

@@ -74,6 +74,6 @@ cdef DLManagedTensor dlpack_c(ary):
     dlm.deleter = deleter
 
     print(tensor.data)
-    print(tensor.bits)
+    print(tensor.dtype.bits)
 
     return dlm

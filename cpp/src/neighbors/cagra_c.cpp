@@ -60,7 +60,7 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
     cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }
 
-  return (void *) 0;
+  return (void *) index;
 }
 
 template <typename T>

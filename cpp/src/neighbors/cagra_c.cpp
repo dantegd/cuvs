@@ -163,7 +163,14 @@ extern "C" cuvsError_t cuvsCagraBuild(cuvsResources_t res,
                 dataset.dtype.bits);
     }
     return CUVS_SUCCESS;
-  } catch (...) {
+  }
+catch(const std::exception& ex)
+{
+    // speciffic handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    std::cerr << "Error occurred: " << ex.what() << std::endl;
+}
+   catch (...) {
     return CUVS_ERROR;
   }
 }

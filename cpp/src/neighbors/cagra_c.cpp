@@ -145,23 +145,23 @@ extern "C" cuvsError_t cuvsCagraBuild(cuvsResources_t res,
 {
   try {
     std::cout << "cuvsCagraBuild.cpp 2" << std::endl;
-    // auto dataset = dataset_tensor->dl_tensor;
-    // std::cout << "cuvsCagraBuild.cpp 3" << std::endl;
+    auto dataset = dataset_tensor->dl_tensor;
+    std::cout << "cuvsCagraBuild.cpp 3" << std::endl;
 
-    // if (dataset.dtype.code == kDLFloat && dataset.dtype.bits == 32) {
-    //   index->addr       = reinterpret_cast<uintptr_t>(_build<float>(res, *params, dataset_tensor));
-    //   index->dtype.code = kDLFloat;
-    // } else if (dataset.dtype.code == kDLInt && dataset.dtype.bits == 8) {
-    //   index->addr       = reinterpret_cast<uintptr_t>(_build<int8_t>(res, *params, dataset_tensor));
-    //   index->dtype.code = kDLInt;
-    // } else if (dataset.dtype.code == kDLUInt && dataset.dtype.bits == 8) {
-    //   index->addr = reinterpret_cast<uintptr_t>(_build<uint8_t>(res, *params, dataset_tensor));
-    //   index->dtype.code = kDLUInt;
-    // } else {
-    //   RAFT_FAIL("Unsupported dataset DLtensor dtype: %d and bits: %d",
-    //             dataset.dtype.code,
-    //             dataset.dtype.bits);
-    // }
+    if (dataset.dtype.code == kDLFloat && dataset.dtype.bits == 32) {
+      index->addr       = reinterpret_cast<uintptr_t>(_build<float>(res, *params, dataset_tensor));
+      index->dtype.code = kDLFloat;
+    } else if (dataset.dtype.code == kDLInt && dataset.dtype.bits == 8) {
+      index->addr       = reinterpret_cast<uintptr_t>(_build<int8_t>(res, *params, dataset_tensor));
+      index->dtype.code = kDLInt;
+    } else if (dataset.dtype.code == kDLUInt && dataset.dtype.bits == 8) {
+      index->addr = reinterpret_cast<uintptr_t>(_build<uint8_t>(res, *params, dataset_tensor));
+      index->dtype.code = kDLUInt;
+    } else {
+      RAFT_FAIL("Unsupported dataset DLtensor dtype: %d and bits: %d",
+                dataset.dtype.code,
+                dataset.dtype.bits);
+    }
     return CUVS_SUCCESS;
   } catch (...) {
     return CUVS_ERROR;

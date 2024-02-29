@@ -30,14 +30,14 @@ from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 
 cdef extern from "cuvs/neighbors/cagra.h" nogil:
 
-    ctypedef enum cagraGraphBuildAlgo:
+    ctypedef enum cuvsCagraGraphBuildAlgo:
         IVF_PQ
         NN_DESCENT
 
     ctypedef struct cuvsCagraIndexParams:
         size_t intermediate_graph_degree
         size_t graph_degree
-        cagraGraphBuildAlgo build_algo
+        cuvsCagraGraphBuildAlgo build_algo
         size_t nn_descent_niter
 
     ctypedef enum cuvsCagraSearchAlgo:

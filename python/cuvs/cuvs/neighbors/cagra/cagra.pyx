@@ -85,9 +85,9 @@ cdef class IndexParams:
         self.params.intermediate_graph_degree = intermediate_graph_degree
         self.params.graph_degree = graph_degree
         if build_algo == "ivf_pq":
-            self.params.build_algo = cagraGraphBuildAlgo.IVF_PQ
+            self.params.build_algo = cuvsCagraGraphBuildAlgo.IVF_PQ
         elif build_algo == "nn_descent":
-            self.params.build_algo = cagraGraphBuildAlgo.NN_DESCENT
+            self.params.build_algo = cuvsCagraGraphBuildAlgo.NN_DESCENT
         self.params.nn_descent_niter = nn_descent_niter
 
     # @property

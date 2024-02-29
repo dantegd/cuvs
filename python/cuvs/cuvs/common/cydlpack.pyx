@@ -67,7 +67,7 @@ cdef DLManagedTensor* dlpack_c(ary):
         print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.bool_:
         dtype.code = DLDataTypeCode.kDLFloat
-        dtype.bits = 16
+        dtype.bits = 8
         print("dtype 1: ", DLDataTypeCode.kDLFloat, 16)
 
     dtype.lanes = 1

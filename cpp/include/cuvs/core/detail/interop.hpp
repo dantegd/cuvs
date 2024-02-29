@@ -96,6 +96,7 @@ MdspanType from_dlpack(DLManagedTensor* managed_tensor)
   std::array<int64_t, MdspanType::extents_type::rank()> shape{};
   for (int64_t i = 0; i < tensor.ndim; ++i) {
     shape[i] = tensor.shape[i];
+    std::cout << "Shape[i]: " << shape[i] << std::endl;
   }
   auto exts = typename MdspanType::extents_type{shape};
 

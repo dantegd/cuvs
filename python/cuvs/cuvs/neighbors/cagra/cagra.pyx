@@ -126,14 +126,14 @@ cdef class Index:
         self.trained = False
 
         if index_create_status == cuvsError_t.CUVS_ERROR:
-            raise Exception("FAIL")
+            raise RuntimeError("Failed to create index.")
 
     def __dealloc__(self):
         cdef cuvsError_t index_destroy_status
         if self.index is not NULL:
             index_destroy_status = cuvsCagraIndexDestroy(self.index)
             if index_destroy_status == cuvsError_t.CUVS_ERROR:
-                raise Exception("FAIL")
+                raise Exception("Failed to deallocate index.")
 
     def __repr__(self):
         # todo(dgd): update repr as we expose data through C API
@@ -199,20 +199,20 @@ def build_index(IndexParams index_params, dataset, resources=None):
     cdef cuvsError_t cstat
 
     # if resources is None:
-    cstat = cuvsResourcesCreate(&res_)
-    if cstat == cuvsError_t.CUVS_ERROR:
-        raise RuntimeError("Error creating Device Reources.")
+    # cstat = cuvsResourcesCreate(&res_)
+    # if cstat == cuvsError_t.CUVS_ERROR:
+    #     raise RuntimeError("Error creating Device Reources.")
 
     # cdef uintptr_t resources_ = <uintptr_t> res_
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Index failed to build.")
     # if resources is None:
-    #     resources = DeviceResources()
+    # resources = DeviceResources()
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
     # if resources is None:
     resources = DeviceResources()
-    # cdef uintptr_t res_ = <uintptr_t> resources.getHandle()
+    cdef uintptr_t res_ = <uintptr_t> resources.getHandle()
 
 
     cdef Index idx = Index()

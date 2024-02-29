@@ -40,7 +40,7 @@ cdef extern from "cuvs/neighbors/cagra.h" nogil:
         cuvsCagraGraphBuildAlgo build_algo
         size_t nn_descent_niter
 
-    typedef cuvsCagraIndexParams* cuvsCagraIndexParams_t;
+    ctypedef cuvsCagraIndexParams* cuvsCagraIndexParams_t
 
     ctypedef enum cuvsCagraSearchAlgo:
         SINGLE_CTA,

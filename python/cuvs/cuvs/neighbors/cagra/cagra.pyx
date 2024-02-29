@@ -200,7 +200,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     print("A")
     if resources is None:
         cstat = cuvsResourcesCreate(resources_)
-     if cstat == cuvsError_t.CUVS_ERROR:
+    if cstat == cuvsError_t.CUVS_ERROR:
         raise RuntimeError("Index failed to build.")
     print(cstat)
 

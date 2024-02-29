@@ -196,11 +196,11 @@ def build_index(IndexParams index_params, dataset, resources=None):
                                     np.dtype('ubyte')])
 
 
-    cdef cuvsResources_t res_
-    print("A")
-    if resources is None:
-        cstat = cuvsResourcesCreate(res_[0])
-    cdef uintptr_t resources_ = <uintptr_t> res_
+    # cdef cuvsResources_t res_
+    # print("A")
+    # if resources is None:
+    #     cstat = cuvsResourcesCreate(res_)
+    # cdef uintptr_t resources_ = <uintptr_t> res_
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Index failed to build.")
     # print(cstat)
@@ -208,33 +208,41 @@ def build_index(IndexParams index_params, dataset, resources=None):
     #     resources = DeviceResources()
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
-    cdef Index idx = Index()
-    print("AA")
-    cdef cuvsError_t build_status
-    print("AB")
-    cdef cydlpack.DLManagedTensor dataset_dlpack = \
-        cydlpack.dlpack_c(dataset_ai)
-    print("AC")
-    cdef cuvsCagraIndexParams* params = index_params.params
-    print("AD")
+    if resources is None:
+        resources = DeviceResources()
+    cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
+    cdef size_t ptr2 = resources.getHandle()
 
-    # print(resources_)
+    print(resources_)
+    print(ptr2)
 
-    with cuda_interruptible():
-        print("AE")
-        build_status = cuvsCagraBuild(
-            &res_,
-            params,
-            &dataset_dlpack,
-            idx.index
-        )
+    # cdef Index idx = Index()
+    # print("AA")
+    # cdef cuvsError_t build_status
+    # print("AB")
+    # cdef cydlpack.DLManagedTensor dataset_dlpack = \
+    #     cydlpack.dlpack_c(dataset_ai)
+    # print("AC")
+    # cdef cuvsCagraIndexParams* params = index_params.params
+    # print("AD")
 
-        if build_status == cuvsError_t.CUVS_ERROR:
-            raise RuntimeError("Index failed to build.")
-        else:
-            idx.trained = True
+    # # print(resources_)
 
-    return idx
+    # with cuda_interruptible():
+    #     print("AE")
+    #     build_status = cuvsCagraBuild(
+    #         res_,
+    #         params,
+    #         &dataset_dlpack,
+    #         idx.index
+    #     )
+
+    #     if build_status == cuvsError_t.CUVS_ERROR:
+    #         raise RuntimeError("Index failed to build.")
+    #     else:
+    #         idx.trained = True
+
+    # return idx
 
 
 cdef class SearchParams:

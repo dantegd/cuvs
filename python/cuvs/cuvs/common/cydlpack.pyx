@@ -75,9 +75,9 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.shape = shape
 
     tensor_ptr = ary.data
-    print(ary.data)
+    print(type(ary.data), ary.data)
 
-    tensor.data = tensor_ptr
+    tensor.data = <void*> tensor_ptr
     tensor.device = dev
     tensor.dtype = dtype
     tensor.strides = NULL

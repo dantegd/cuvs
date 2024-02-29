@@ -77,7 +77,7 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor_ptr = ary.data
     print(ary.data)
 
-    tensor.data = <void*> tensor_ptr
+    tensor.data = tensor_ptr
     tensor.device = dev
     tensor.dtype = dtype
     tensor.strides = NULL
@@ -87,6 +87,6 @@ cdef DLManagedTensor dlpack_c(ary):
     dlm.manager_ctx = NULL
     dlm.deleter = deleter
 
-    printf("%d\n", tensor.data)
+    printf("%p\n", tensor.data)
 
     return dlm

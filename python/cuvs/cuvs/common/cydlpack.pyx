@@ -95,10 +95,10 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.shape = shape
     tensor.byte_offset = 0
 
-    print("data: ", <void*> tensor_ptr)
+    print("data: ", ary.data)
     print("device: ", dev)
     print("dtype: ", dtype)
-    print("strides: ", NULL)
+    print("strides: ", "NULL")
     print("ndim: ", ndim)
     print("shape: ", ary.shape)
     print("byte_offset: ", 0)

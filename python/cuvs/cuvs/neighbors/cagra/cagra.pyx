@@ -46,7 +46,7 @@ from libc.stdint cimport (
     uint64_t,
     uintptr_t,
 )
-from pylibraft.common.handle cimport device_resources
+from pylibraft.common.resources cimport device_resources
 
 from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t, cuvsResourcesCreate
 
@@ -142,7 +142,7 @@ cdef class Index:
         return "Index(type=CAGRA, metric=L2" + (", ".join(attr_str)) + ")"
 
 
-# @auto_sync_resources
+@auto_sync_resources
 def build_index(IndexParams index_params, dataset, resources=None):
     """
     Build the CAGRA index from the dataset for efficient search.
@@ -179,12 +179,12 @@ def build_index(IndexParams index_params, dataset, resources=None):
     >>> k = 10
     >>> dataset = cp.random.random_sample((n_samples, n_features),
     ...                                   dtype=cp.float32)
-    >>> handle = DeviceResources()
+    >>> resources = DeviceResources()
     >>> build_params = cagra.IndexParams(metric="sqeuclidean")
     >>> index = cagra.build_index(build_params, dataset)
     >>> distances, neighbors = cagra.search(cagra.SearchParams(),
     ...                                      index, dataset,
-    ...                                      k, handle=handle)
+    ...                                      k, resources=resources)
     >>> distances = cp.asarray(distances)
     >>> neighbors = cp.asarray(neighbors)
     """
@@ -198,9 +198,6 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     cdef cuvsResources_t res_
     cdef cuvsError_t cstat
-
-    print("resources ", resources)
-    # print(not resources or resources is None)
 
     # if resources is None:
     cstat = cuvsResourcesCreate(&res_)
@@ -442,8 +439,8 @@ def search(SearchParams search_params,
     >>> dataset = cp.random.random_sample((n_samples, n_features),
     ...                                   dtype=cp.float32)
     >>> # Build index
-    >>> handle = DeviceResources()
-    >>> index = cagra.build(cagra.IndexParams(), dataset, handle=handle)
+    >>> resources = DeviceResources()
+    >>> index = cagra.build(cagra.IndexParams(), dataset, resources=resources)
     >>> # Search using the built index
     >>> queries = cp.random.random_sample((n_queries, n_features),
     ...                                   dtype=cp.float32)
@@ -456,10 +453,10 @@ def search(SearchParams search_params,
     >>> # creation during search. This is useful if multiple searches
     >>> # are performad with same query size.
     >>> distances, neighbors = cagra.search(search_params, index, queries,
-    ...                                     k, handle=handle)
+    ...                                     k, resources=resources)
     >>> # pylibraft functions are often asynchronous so the
-    >>> # handle needs to be explicitly synchronized
-    >>> handle.sync()
+    >>> # resources needs to be explicitly synchronized
+    >>> resources.sync()
     >>> neighbors = cp.asarray(neighbors)
     >>> distances = cp.asarray(distances)
     """

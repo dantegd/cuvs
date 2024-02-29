@@ -78,7 +78,7 @@ cdef class IndexParams:
                  metric="sqeuclidean",
                  intermediate_graph_degree=128,
                  graph_degree=64,
-                 build_algo="ivf_pq",
+                 build_algo="nn_descent",
                  nn_descent_niter=20):
 
         cuvsCagraIndexParamsCreate(&self.params)

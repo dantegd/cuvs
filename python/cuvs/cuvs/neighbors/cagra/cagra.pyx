@@ -240,7 +240,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     with cuda_interruptible():
         print("AE")
         build_status = cuvsCagraBuild(
-            resources_,
+            res_,
             params,
             &dataset_dlpack,
             idx.index

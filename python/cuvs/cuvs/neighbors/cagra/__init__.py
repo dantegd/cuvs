@@ -20,4 +20,5 @@ __all__ = [
     "IndexParams",
     "SearchParams",
     "build_index",
+    "search"
 ]

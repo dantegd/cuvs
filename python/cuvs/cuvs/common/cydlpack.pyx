@@ -16,6 +16,7 @@
 # cython: language_level=3
 
 import numpy as np
+from libc.stdio cimport printf
 
 from libc cimport stdlib
 
@@ -73,7 +74,6 @@ cdef DLManagedTensor dlpack_c(ary):
     dlm.manager_ctx = NULL
     dlm.deleter = deleter
 
-    print(tensor_ptr)
-    print "{0:x}".format(<unsigned int>tensor.data)
+    printf("%d\n", tensor_ptr)
 
     return dlm

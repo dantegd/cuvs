@@ -197,10 +197,10 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
 
     cdef cuvsResources_t res_
-    # cdef cuvsError_t cstat
+    cdef cuvsError_t cstat
 
     # if resources is None:
-    # cstat = cuvsResourcesCreate(&res_)
+    cstat = cuvsResourcesCreate(&res_)
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Error creating Device Reources.")
 
@@ -210,11 +210,11 @@ def build_index(IndexParams index_params, dataset, resources=None):
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Index failed to build.")
     # if resources is None:
-    stream = Stream()
-    resources = DeviceResources(stream)
+    # stream = Stream()
+    # resources = DeviceResources(stream)
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
-    res_ = <cuvsResources_t> resources.getHandle()
+    # res_ = <cuvsResources_t> resources.getHandle()
     print("res_: ", res_)
 
     # if resources is None:

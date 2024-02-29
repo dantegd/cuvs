@@ -214,7 +214,7 @@ extern "C" cuvsError_t cuvsCagraSearch(cuvsResources_t res,
                 queries.dtype.bits);
     }
     return CUVS_SUCCESS;
-  catch(const std::exception& ex)
+}  catch(const std::exception& ex)
 {
     // speciffic handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly

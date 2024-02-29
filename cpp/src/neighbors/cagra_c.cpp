@@ -104,7 +104,9 @@ void _search(cuvsResources_t res,
 extern "C" cuvsError_t cuvsCagraIndexCreate(cuvsCagraIndex_t* index)
 {
   try {
+    std::cout << "cuvsCagraIndexCreate.cpp 2" << std::endl;
     *index = new cuvsCagraIndex{};
+    std::cout << "cuvsCagraIndexCreate.cpp 2" << std::endl;
     return CUVS_SUCCESS;
   } catch (...) {
     return CUVS_ERROR;

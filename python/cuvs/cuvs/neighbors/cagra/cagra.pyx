@@ -236,10 +236,10 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
         idx.trained = True
 
-        # if build_status == cuvsError_t.CUVS_ERROR:
-        #     raise RuntimeError("Index failed to build.")
-        # else:
-        #     idx.trained = True
+        if build_status == cuvsError_t.CUVS_ERROR:
+            raise RuntimeError("Index failed to build.")
+        else:
+            idx.trained = True
 
     return idx
 

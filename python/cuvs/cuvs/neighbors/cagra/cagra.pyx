@@ -206,7 +206,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     elif cstat == cuvsError_t.CUVS_ERROR:
         print("wtf")
     else:
-        print("nay")
+        print(cstat)
 
     print(<uintptr_t>res_)
     # cdef uintptr_t resources_ = <uintptr_t> res_

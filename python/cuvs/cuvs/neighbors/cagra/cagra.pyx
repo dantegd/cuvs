@@ -202,6 +202,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
         cstat = cuvsResourcesCreate(res_)
     if cstat == cuvsError_t.CUVS_SUCCESS:
         print("yay")
+    else:
+        print("nay")
 
     print(<uintptr_t>res_)
     # cdef uintptr_t resources_ = <uintptr_t> res_

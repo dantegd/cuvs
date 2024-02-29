@@ -36,7 +36,7 @@ cdef DLManagedTensor dlpack_c(ary):
     cdef DLTensor tensor
     cdef DLManagedTensor dlm
 
-    if hasattr(ary, "__cuda_array_interface__"):
+    if ary.from_cai:
         dev_type = DLDeviceType.kDLCUDA
     else:
         dev_type = DLDeviceType.kDLCPU
@@ -60,10 +60,7 @@ cdef DLManagedTensor dlpack_c(ary):
     elif ary.dtype == np.bool:
         dtype.code = DLDataTypeCode.kDLFloat
 
-    if hasattr(ary, "__cuda_array_interface__"):
-        tensor_ptr = ary.__cuda_array_interface__["data"][0]
-    else:
-        tensor_ptr = ary.__array_interface__["data"][0]
+    tensor_ptr = ary.data
 
     tensor.data = <void*> tensor_ptr
     tensor.device = dev

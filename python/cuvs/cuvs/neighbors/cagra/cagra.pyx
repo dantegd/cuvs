@@ -25,6 +25,8 @@ from cython.operator cimport dereference as deref
 
 from cuvs.common cimport cydlpack
 
+from libcpp cimport bool
+
 from pylibraft.common import (
     DeviceResources,
     auto_convert_output,
@@ -78,6 +80,9 @@ cdef class IndexParams:
                  graph_degree=64,
                  build_algo="ivf_pq",
                  nn_descent_niter=20):
+
+        cuvsCagraIndexParamsCreate(&params)
+
         # todo (dgd): enable once other metrics are present
         # and exposed in cuVS C API
         # self.params.metric = _get_metric(metric)
@@ -113,6 +118,7 @@ cdef class IndexParams:
 
 cdef class Index:
     cdef cuvsCagraIndex_t index
+    cdef bool trained
 
     def __cinit__(self):
         cdef cuvsError_t index_create_status

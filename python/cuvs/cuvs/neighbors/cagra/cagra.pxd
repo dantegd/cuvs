@@ -72,6 +72,10 @@ cdef extern from "cuvs/neighbors/cagra.h" nogil:
 
     ctypedef cuvsCagraIndex* cuvsCagraIndex_t
 
+    cuvsError_t cuvsCagraIndexParamsCreate(cuvsCagraIndexParams_t* params)
+
+    cuvsError_t cuvsCagraIndexParamsDestroy(cuvsCagraIndexParams_t index)
+
     cuvsError_t cuvsCagraIndexCreate(cuvsCagraIndex_t* index)
 
     cuvsError_t cuvsCagraIndexDestroy(cuvsCagraIndex_t index)

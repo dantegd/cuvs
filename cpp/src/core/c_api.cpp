@@ -27,7 +27,7 @@ extern "C" cuvsError_t cuvsResourcesCreate(cuvsResources_t* res)
   try {
     std::cout << "cuvsResourcesCreate 1" << std::endl;
     auto res_ptr = new raft::resources{};
-    std::cout << "cuvsResourcesCreate 2" << std::endl;
+    std::cout << "cuvsResourcesCreate 2 " << res_ptr << std::endl;
     *res         = reinterpret_cast<uintptr_t>(res_ptr);
     std::cout << "cuvsResourcesCreate 3" << std::endl;
     status       = CUVS_SUCCESS;

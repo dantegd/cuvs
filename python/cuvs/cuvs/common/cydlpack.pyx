@@ -74,6 +74,6 @@ cdef DLManagedTensor dlpack_c(ary):
     dlm.manager_ctx = NULL
     dlm.deleter = deleter
 
-    printf("%d\n", tensor_ptr)
+    printf("%d\n", tensor.data)
 
     return dlm

@@ -86,7 +86,7 @@ MdspanType from_dlpack(DLManagedTensor* managed_tensor)
     RAFT_EXPECTS(is_dlpack_device_compatible(tensor),
                  "device_type mismatch between return mdspan and DLTensor");
   } else if (to_device.device_type == kDLCPU) {
-    std::cout << "kDLCUDA " << kDLCUDA << std::endl;
+    std::cout << "kDLCPU " << kDLCPU << std::endl;
     RAFT_EXPECTS(is_dlpack_host_compatible(tensor),
                  "device_type mismatch between return mdspan and DLTensor");
   }

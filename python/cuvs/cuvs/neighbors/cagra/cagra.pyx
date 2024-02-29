@@ -26,7 +26,7 @@ from cython.operator cimport dereference as deref
 from cuvs.common cimport cydlpack
 
 from libcpp cimport bool
-from libcpp cimport reinterpret_cast
+from libcpp cimport cast
 
 from pylibraft.common import (
     DeviceResources,

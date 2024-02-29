@@ -70,7 +70,7 @@ cdef class IndexParams:
               building the knn graph. It is expected to be generally
               faster than ivf_pq.
     """
-    cdef cagraIndexParams params
+    cdef cuvsCagraIndexParams params
 
     def __init__(self, *,
                  metric="sqeuclidean",
@@ -116,7 +116,7 @@ cdef class Index:
 
     def __cinit__(self):
         cdef cuvsError_t index_create_status
-        index_create_status = cagraIndexCreate(&self.index)
+        index_create_status = cuvsCagraIndexCreate(&self.index)
         self.trained = False
 
         if index_create_status == cuvsError_t.CUVS_ERROR:
@@ -125,7 +125,7 @@ cdef class Index:
     def __dealloc__(self):
         cdef cuvsError_t index_destroy_status
         if self.index is not NULL:
-            index_destroy_status = cagraIndexDestroy(self.index)
+            index_destroy_status = cuvsCagraIndexDestroy(self.index)
             if index_destroy_status == cuvsError_t.CUVS_ERROR:
                 raise Exception("FAIL")
 
@@ -197,10 +197,10 @@ def build_index(IndexParams index_params, dataset, resources=None):
     cdef cuvsError_t build_status
     cdef cydlpack.DLManagedTensor dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
-    cdef cagraIndexParams* params = &index_params.params
+    cdef cuvsCagraIndexParams* params = &index_params.params
 
     with cuda_interruptible():
-        build_status = cagraBuild(
+        build_status = cuvsCagraBuild(
             deref(resources_),
             params,
             &dataset_dlpack,
@@ -264,7 +264,7 @@ cdef class SearchParams:
     rand_xor_mask: int, default = 0x128394
         Bit mask used for initial random seed node selection.
     """
-    cdef cagraSearchParams params
+    cdef cuvsCagraSearchParams params
 
     def __init__(self, *,
                  max_queries=0,
@@ -284,13 +284,13 @@ cdef class SearchParams:
         self.params.itopk_size = itopk_size
         self.params.max_iterations = max_iterations
         if algo == "single_cta":
-            self.params.algo = cagraSearchAlgo.SINGLE_CTA
+            self.params.algo = cuvsCagraSearchAlgo.SINGLE_CTA
         elif algo == "multi_cta":
-            self.params.algo = cagraSearchAlgo.MULTI_CTA
+            self.params.algo = cuvsCagraSearchAlgo.MULTI_CTA
         elif algo == "multi_kernel":
-            self.params.algo = cagraSearchAlgo.MULTI_KERNEL
+            self.params.algo = cuvsCagraSearchAlgo.MULTI_KERNEL
         elif algo == "auto":
-            self.params.algo = cagraSearchAlgo.AUTO
+            self.params.algo = cuvsCagraSearchAlgo.AUTO
         else:
             raise ValueError("`algo` value not supported.")
 
@@ -299,11 +299,11 @@ cdef class SearchParams:
         self.params.min_iterations = min_iterations
         self.params.thread_block_size = thread_block_size
         if hashmap_mode == "hash":
-            self.params.hashmap_mode = cagraHashMode.HASH
+            self.params.hashmap_mode = cuvsCagraHashMode.HASH
         elif hashmap_mode == "small":
-            self.params.hashmap_mode = cagraHashMode.SMALL
+            self.params.hashmap_mode = cuvsCagraHashMode.SMALL
         elif hashmap_mode == "auto":
-            self.params.hashmap_mode = cagraHashMode.AUTO_HASH
+            self.params.hashmap_mode = cuvsCagraHashMode.AUTO_HASH
         else:
             raise ValueError("`hashmap_mode` value not supported.")
 
@@ -467,14 +467,14 @@ def search(SearchParams search_params,
     _check_input_array(distances_cai, [np.dtype('float32')],
                        exp_rows=n_queries, exp_cols=k)
 
-    cdef cagraSearchParams* params = &search_params.params
+    cdef cuvsCagraSearchParams* params = &search_params.params
     cdef cuvsError_t search_status
     cdef cydlpack.DLManagedTensor queries_dlpack = cydlpack.dlpack_c(queries_cai)
     cdef cydlpack.DLManagedTensor neighbors_dlpack = cydlpack.dlpack_c(neighbors_cai)
     cdef cydlpack.DLManagedTensor distances_dlpack = cydlpack.dlpack_c(distances_cai)
 
     with cuda_interruptible():
-        search_status = cagraSearch(
+        search_status = cuvsCagraSearch(
             deref(resources_),
             params,
             index.index,

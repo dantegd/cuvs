@@ -85,11 +85,11 @@ cdef extern from "cuvs/neighbors/cagra.h" nogil:
     cuvsError_t cuvsCagraBuild(cuvsResources_t res,
                            cuvsCagraIndexParams* params,
                            DLManagedTensor* dataset,
-                           cuvsCagraIndex_t index) except +
+                           cuvsCagraIndex_t index)
 
     cuvsError_t cuvsCagraSearch(cuvsResources_t res,
                             cuvsCagraSearchParams* params,
                             cuvsCagraIndex_t index,
                             DLManagedTensor* queries,
                             DLManagedTensor* neighbors,
-                            DLManagedTensor* distances) except +
+                            DLManagedTensor* distances)

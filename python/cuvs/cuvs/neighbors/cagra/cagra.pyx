@@ -466,9 +466,16 @@ def search(SearchParams search_params,
     if not index.trained:
         raise ValueError("Index need to be built before calling search.")
 
-    if resources is None:
-        resources = DeviceResources()
-    cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
+    # if resources is None:
+    #     resources = DeviceResources()
+    # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
+
+    cdef cuvsResources_t res_
+    cdef cuvsError_t cstat
+
+    cstat = cuvsResourcesCreate(&res_)
+    if cstat == cuvsError_t.CUVS_ERROR:
+        raise RuntimeError("Error creating Device Reources.")
 
     # todo(dgd): we can make the check of dtype a parameter of wrap_array
     # in RAFT to make this a single call
@@ -501,7 +508,7 @@ def search(SearchParams search_params,
 
     with cuda_interruptible():
         search_status = cuvsCagraSearch(
-            resources_,
+            res_,
             params,
             index.index,
             &queries_dlpack,

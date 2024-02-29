@@ -46,8 +46,8 @@ def auto_sync_resources(f):
 
         ret_value = f(*args, resources=resources, **kwargs)
 
-        # if sync_handle:
-        #     resources.sync()
+        if sync_handle:
+            resources.sync()
 
         return ret_value
 

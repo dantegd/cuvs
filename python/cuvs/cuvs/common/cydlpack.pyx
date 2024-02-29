@@ -63,12 +63,24 @@ cdef DLManagedTensor dlpack_c(ary):
     elif ary.dtype == np.bool:
         dtype.code = DLDataTypeCode.kDLFloat
 
+    dtype.lanes = 1
+
+    cdef size_t ndim = ary.shape.size()
+
+    cdef int64_t* shape = <int64_t*>stdlib.malloc(ndim * sizeof(int64_t))
+
+    for n in range(ndim):
+        shape[n] = array._shape[n]
+
+    dl_tensor.shape = shape
+
     tensor_ptr = ary.data
 
     tensor.data = <void*> tensor_ptr
     tensor.device = dev
     tensor.dtype = dtype
     tensor.strides = NULL
+    tensor.ndim = ndim
 
     dlm.dl_tensor = tensor
     dlm.manager_ctx = NULL

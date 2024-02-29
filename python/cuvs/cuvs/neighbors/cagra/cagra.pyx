@@ -195,7 +195,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
                                     np.dtype('ubyte')])
 
 
-    cdef cuvsResources_t res_
+    # cdef cuvsResources_t res_
     cdef cuvsError_t cstat
 
     # if resources is None:

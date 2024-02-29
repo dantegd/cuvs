@@ -38,10 +38,10 @@ cdef DLManagedTensor dlpack_c(ary):
     cdef DLManagedTensor dlm
 
     if ary.from_cai:
-        # print("A")
+        print("A")
         dev_type = DLDeviceType.kDLCUDA
     else:
-        # print("B")
+        print("B")
         dev_type = DLDeviceType.kDLCPU
 
     dev.device_type = dev_type
@@ -71,6 +71,8 @@ cdef DLManagedTensor dlpack_c(ary):
 
     for n in range(ndim):
         shape[n] = ary.shape[n]
+
+    print(ndim, ary.shape)
 
     tensor.shape = shape
 

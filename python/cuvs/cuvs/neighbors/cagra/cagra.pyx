@@ -220,7 +220,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status
-    cdef cydlpack.DLManagedTensor dataset_dlpack = \
+    cdef cydlpack.DLManagedTensor* dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
     cdef cuvsCagraIndexParams* params = index_params.params
 
@@ -229,7 +229,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
         build_status = cuvsCagraBuild(
             res_,
             params,
-            &dataset_dlpack,
+            dataset_dlpack,
             idx.index
         )
 
@@ -500,18 +500,18 @@ def search(SearchParams search_params,
 
     cdef cuvsCagraSearchParams* params = &search_params.params
     cdef cuvsError_t search_status
-    cdef cydlpack.DLManagedTensor queries_dlpack = cydlpack.dlpack_c(queries_cai)
-    cdef cydlpack.DLManagedTensor neighbors_dlpack = cydlpack.dlpack_c(neighbors_cai)
-    cdef cydlpack.DLManagedTensor distances_dlpack = cydlpack.dlpack_c(distances_cai)
+    cdef cydlpack.DLManagedTensor* queries_dlpack = cydlpack.dlpack_c(queries_cai)
+    cdef cydlpack.DLManagedTensor* neighbors_dlpack = cydlpack.dlpack_c(neighbors_cai)
+    cdef cydlpack.DLManagedTensor* distances_dlpack = cydlpack.dlpack_c(distances_cai)
 
     with cuda_interruptible():
         search_status = cuvsCagraSearch(
             res_,
             params,
             index.index,
-            &queries_dlpack,
-            &neighbors_dlpack,
-            &distances_dlpack
+            queries_dlpack,
+            neighbors_dlpack,
+            distances_dlpack
         )
 
         if search_status == cuvsError_t.CUVS_ERROR:

@@ -29,13 +29,14 @@ cdef void deleter(DLManagedTensor* tensor) noexcept:
     stdlib.free(tensor)
 
 
-cdef DLManagedTensor dlpack_c(ary):
+cdef DLManagedTensor* dlpack_c(ary):
     # todo(dgd): add checking options/parameters
     cdef DLDeviceType dev_type
     cdef DLDevice dev
     cdef DLDataType dtype
     cdef DLTensor tensor
-    cdef DLManagedTensor dlm
+    cdef DLManagedTensor* dlm_tensor = \
+        <DLManagedTensor*>stdlib.malloc(sizeof(DLManagedTensor))
 
     if ary.from_cai:
         print("A")

@@ -16,7 +16,7 @@
 # cython: language_level=3
 
 import numpy as np
-from libc.stdio cimport printf
+# from libc.stdio cimport printf
 
 from libc cimport stdlib
 
@@ -38,10 +38,10 @@ cdef DLManagedTensor dlpack_c(ary):
     cdef DLManagedTensor dlm
 
     if ary.from_cai:
-        print("A")
+        # print("A")
         dev_type = DLDeviceType.kDLCUDA
     else:
-        print("B")
+        # print("B")
         dev_type = DLDeviceType.kDLCPU
 
     dev.device_type = dev_type
@@ -75,7 +75,7 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.shape = shape
 
     tensor_ptr = ary.data
-    print(type(ary.data), ary.data)
+    # print(type(ary.data), ary.data)
 
     tensor.data = <void*> tensor_ptr
     tensor.device = dev
@@ -87,6 +87,6 @@ cdef DLManagedTensor dlpack_c(ary):
     dlm.manager_ctx = NULL
     dlm.deleter = deleter
 
-    printf("%p\n", tensor.data)
+    # printf("%p\n", tensor.data)
 
     return dlm

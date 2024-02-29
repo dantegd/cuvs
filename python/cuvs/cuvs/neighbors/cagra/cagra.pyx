@@ -142,7 +142,7 @@ cdef class Index:
         return "Index(type=CAGRA, metric=L2" + (", ".join(attr_str)) + ")"
 
 
-@auto_sync_resources
+# @auto_sync_resources
 def build_index(IndexParams index_params, dataset, resources=None):
     """
     Build the CAGRA index from the dataset for efficient search.

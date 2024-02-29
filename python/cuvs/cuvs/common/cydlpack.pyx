@@ -62,7 +62,15 @@ cdef DLManagedTensor* dlpack_c(ary):
         dtype.bits = 32
         print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
     elif ary.dtype == np.int64:
-        dtype.code = DLDataTypeCode.kDLFloat
+        dtype.code = DLDataTypeCode.kDLInt
+        dtype.bits = 64
+        print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
+    elif ary.dtype == np.uint32:
+        dtype.code = DLDataTypeCode.kDLUInt
+        dtype.bits = 32
+        print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
+    elif ary.dtype == np.uint64:
+        dtype.code = DLDataTypeCode.kDLUInt
         dtype.bits = 64
         print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.bool_:

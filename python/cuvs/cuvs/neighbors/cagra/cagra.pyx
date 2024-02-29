@@ -72,7 +72,7 @@ cdef class IndexParams:
               building the knn graph. It is expected to be generally
               faster than ivf_pq.
     """
-    cdef cuvsCagraIndexParams_t params
+    cdef cuvsCagraIndexParams* params
 
     def __init__(self, *,
                  metric="sqeuclidean",

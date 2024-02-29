@@ -481,7 +481,7 @@ def search(SearchParams search_params,
 
     with cuda_interruptible():
         search_status = cuvsCagraSearch(
-            deref(resources_),
+            resources_,
             params,
             index.index,
             &queries_dlpack,

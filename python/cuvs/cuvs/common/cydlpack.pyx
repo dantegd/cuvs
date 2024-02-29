@@ -51,24 +51,31 @@ cdef DLManagedTensor dlpack_c(ary):
     if ary.dtype == np.float32:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 32
+        print("dtype 1: ", DLDataTypeCode.kDLFloat, 32)
     elif ary.dtype == np.float64:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 64
+        print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.int32:
         dtype.code = DLDataTypeCode.kDLInt
         dtype.bits = 32
+        print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
     elif ary.dtype == np.int64:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 64
+        print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.bool_:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 16
+        print("dtype 1: ", DLDataTypeCode.kDLFloat, 16)
 
     dtype.lanes = 1
 
+
+
     cdef size_t ndim = len(ary.shape)
 
-    cdef int64_t* shape = <int64_t*>stdlib.malloc(ndim * sizeof(int64_t))
+    cdef int64_t* shape = <int64_t*>stdlib.malloc(ndim * sizeof(int64_t) * 2)
 
     for i in range(ndim):
         shape[i] = ary.shape[i]
@@ -87,6 +94,15 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.ndim = ndim
     tensor.shape = shape
     tensor.byte_offset = 0
+
+    print("data: ", <void*> tensor_ptr)
+    print("device: ", dev)
+    print("dtype: ", dtype)
+    print("strides: ", NULL)
+    print("ndim: ", ndim)
+    print("shape: ", shape)
+    print("byte_offset: ", 0)
+
 
     dlm.dl_tensor = tensor
     dlm.manager_ctx = NULL

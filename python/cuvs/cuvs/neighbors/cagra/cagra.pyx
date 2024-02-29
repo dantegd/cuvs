@@ -203,6 +203,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
     if cstat == cuvsError_t.CUVS_ERROR:
         raise RuntimeError("Error creating Device Reources.")
 
+
+
     # cdef uintptr_t resources_ = <uintptr_t> res_
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Index failed to build.")

@@ -52,12 +52,12 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
     using mdspan_type = raft::device_matrix_view<T const, int64_t, raft::row_major>;
     std::cout << "cagra_c.cpp 5" << std::endl;
     auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
-    // cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
+    cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
   } else if (cuvs::core::is_dlpack_host_compatible(dataset)) {
     using mdspan_type = raft::host_matrix_view<T const, int64_t, raft::row_major>;
     std::cout << "cagra_c.cpp 6" << std::endl;
     auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
-    // cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
+    cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }
 
   return (void *) 0;

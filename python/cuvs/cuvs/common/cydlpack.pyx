@@ -37,8 +37,10 @@ cdef DLManagedTensor dlpack_c(ary):
     cdef DLManagedTensor dlm
 
     if ary.from_cai:
+        print("A")
         dev_type = DLDeviceType.kDLCUDA
     else:
+        print("B")
         dev_type = DLDeviceType.kDLCPU
 
     dev.device_type = dev_type

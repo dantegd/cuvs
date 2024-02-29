@@ -71,24 +71,32 @@ MdspanType from_dlpack(DLManagedTensor* managed_tensor)
   auto tensor = managed_tensor->dl_tensor;
 
   auto to_data_type = data_type_to_DLDataType<typename MdspanType::value_type>();
+  std::cout << "CA" << std::endl;
   RAFT_EXPECTS(to_data_type.code == tensor.dtype.code,
                "code mismatch between return mdspan and DLTensor");
+  std::cout << "CB" << std::endl;
   RAFT_EXPECTS(to_data_type.bits == tensor.dtype.bits,
                "bits mismatch between return mdspan and DLTensor");
+  std::cout << "CC" << std::endl;
   RAFT_EXPECTS(to_data_type.lanes == tensor.dtype.lanes,
                "lanes mismatch between return mdspan and DLTensor");
+  std::cout << "CD" << std::endl;
   RAFT_EXPECTS(tensor.dtype.lanes == 1, "More than 1 DLTensor lanes not supported");
+  std::cout << "CE" << std::endl;
   RAFT_EXPECTS(tensor.strides == nullptr, "Strided memory layout for DLTensor not supported");
 
   auto to_device = accessor_type_to_DLDevice<typename MdspanType::accessor_type>();
   if (to_device.device_type == kDLCUDA) {
+    std::cout << "CF" << std::endl;
     RAFT_EXPECTS(is_dlpack_device_compatible(tensor),
                  "device_type mismatch between return mdspan and DLTensor");
   } else if (to_device.device_type == kDLCPU) {
+    std::cout << "CG" << std::endl;
     RAFT_EXPECTS(is_dlpack_host_compatible(tensor),
                  "device_type mismatch between return mdspan and DLTensor");
   }
 
+  std::cout << "CI" << std::endl;
   RAFT_EXPECTS(MdspanType::extents_type::rank() == tensor.ndim,
                "ndim mismatch between return mdspan and DLTensor");
 

@@ -197,7 +197,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     if resources is None:
         resources = DeviceResources()
-    cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
+    cdef uintptr_t resources_ = cast.reinterpret_cast[uintptr_t](resources.getHandle())
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status

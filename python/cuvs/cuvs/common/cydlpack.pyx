@@ -74,7 +74,7 @@ cdef DLManagedTensor dlpack_c(ary):
 
     print(ndim, ary.shape)
 
-    tensor.shape = shape
+
 
     tensor_ptr = ary.data
     # print(type(ary.data), ary.data)
@@ -84,6 +84,8 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.dtype = dtype
     tensor.strides = NULL
     tensor.ndim = ndim
+    tensor.shape = shape
+    tensor.byte_offset = 0
 
     dlm.dl_tensor = tensor
     dlm.manager_ctx = NULL

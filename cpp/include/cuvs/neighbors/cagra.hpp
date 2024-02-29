@@ -281,10 +281,14 @@ struct index : ann::index {
       raft_index_(std::make_unique<raft::neighbors::cagra::index<T, IdxT>>(
         res, static_cast<raft::distance::DistanceType>((int)metric), dataset, knn_graph))
   {
+    std::cout << "cagra.hpp 1" << std::endl;
     RAFT_EXPECTS(dataset.extent(0) == knn_graph.extent(0),
                  "Dataset and knn_graph must have equal number of rows");
+    std::cout << "cagra.hpp 2" << std::endl;
     update_dataset(res, dataset);
+    std::cout << "cagra.hpp 3" << std::endl;
     update_graph(res, knn_graph);
+    std::cout << "cagra.hpp 4" << std::endl;
     raft::resource::sync_stream(res);
   }
 

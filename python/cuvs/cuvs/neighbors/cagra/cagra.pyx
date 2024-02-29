@@ -234,6 +234,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
             idx.index
         )
 
+        idx.trained = True
+
         # if build_status == cuvsError_t.CUVS_ERROR:
         #     raise RuntimeError("Index failed to build.")
         # else:
@@ -464,7 +466,7 @@ def search(SearchParams search_params,
     >>> distances = cp.asarray(distances)
     """
     if not index.trained:
-        raise ValueError("Index need to be built before calling search.")
+        raise ValueError("Index needs to be built before calling search.")
 
     # if resources is None:
     #     resources = DeviceResources()

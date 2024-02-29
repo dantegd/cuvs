@@ -198,11 +198,14 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     cdef cuvsResources_t* resources_
     print("A")
+    # if resources is None:
+    #     cstat = cuvsResourcesCreate(resources_)
+    # if cstat == cuvsError_t.CUVS_ERROR:
+    #     raise RuntimeError("Index failed to build.")
+    # print(cstat)
     if resources is None:
-        cstat = cuvsResourcesCreate(resources_)
-    if cstat == cuvsError_t.CUVS_ERROR:
-        raise RuntimeError("Index failed to build.")
-    print(cstat)
+        resources = DeviceResources()
+    cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
     cdef Index idx = Index()
     print("AA")

@@ -28,7 +28,7 @@ from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t
 from cuvs.common.cydlpack cimport DLDataType, DLManagedTensor
 
 
-cdef extern from "cuvs/neighbors/cagra_c.h" nogil:
+cdef extern from "cuvs/neighbors/cagra.h" nogil:
 
     ctypedef enum cagraGraphBuildAlgo:
         IVF_PQ

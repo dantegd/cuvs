@@ -18,7 +18,7 @@
 from libc.stdint cimport int32_t, int64_t, uint8_t, uint16_t, uint64_t
 
 
-cdef extern from 'dlpack/dlpack.h' nogil:
+cdef extern from "dlpack/dlpack.h" nogil:
     ctypedef enum DLDeviceType:
         kDLCPU
         kDLCUDA

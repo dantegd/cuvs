@@ -33,7 +33,7 @@ project(
             C CXX CUDA
 )
 
-option(FIND_CUVS_CPP "Search for existing CUVS C++ installations before defaulting to local files"
+option(FIND_CUVS_CPP "Search wha existing CUVS C++ installations before defaulting to local files"
        OFF
 )
 
@@ -44,18 +44,16 @@ include(rapids-cmake)
 include(rapids-cpm)
 include(rapids-export)
 include(rapids-find)
-include(rapids-cython-core)
 
 rapids_cpm_init()
 
 # If the user requested it we attempt to find CUVS.
 if(FIND_CUVS_CPP)
   find_package(cuvs ${cuvs_version})
+  include(../../cpp/cmake/thirdparty/get_dlpack.cmake)
 else()
   set(cuvs_FOUND OFF)
 endif()
-
-include(../../cpp/cmake/thirdparty/get_dlpack.cmake)
 
 if(NOT cuvs_FOUND)
   set(BUILD_TESTS OFF)
@@ -68,6 +66,8 @@ if(NOT cuvs_FOUND)
   set(cython_lib_dir cuvs_py)
   install(TARGETS cuvs DESTINATION ${cython_lib_dir})
 endif()
+
+include(rapids-cython-core)
 
 rapids_cython_init()
 

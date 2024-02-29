@@ -196,7 +196,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
                                     np.dtype('ubyte')])
 
 
-    cdef uvsResources_t resources_
+    cdef cuvsResources_t resources_
     if resources is None:
         resources = cuvsResourcesCreate(*resources_)
     # cdef size_t resources_ = <size_t> resources.getHandle()

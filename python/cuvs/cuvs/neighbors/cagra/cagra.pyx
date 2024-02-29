@@ -203,7 +203,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     cdef cuvsError_t build_status
     cdef cydlpack.DLManagedTensor dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
-    cdef cuvsCagraIndexParams* params = &index_params.params
+    cdef cuvsCagraIndexParams* params = index_params.params
 
     with cuda_interruptible():
         build_status = cuvsCagraBuild(

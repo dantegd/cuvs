@@ -33,6 +33,7 @@ from pylibraft.common import (
     auto_convert_output,
     cai_wrapper,
     device_ndarray,
+    Stream
 )
 from pylibraft.common.cai_wrapper import wrap_array
 from pylibraft.common.interruptible import cuda_interruptible
@@ -209,7 +210,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Index failed to build.")
     # if resources is None:
-    resources = DeviceResources()
+    stream = Stream()
+    resources = DeviceResources(stream)
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
     res_ = <cuvsResources_t> resources.getHandle()

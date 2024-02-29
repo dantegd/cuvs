@@ -208,7 +208,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     print("AB")
     cdef cydlpack.DLManagedTensor dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
-        print("AC")
+    print("AC")
     cdef cuvsCagraIndexParams* params = index_params.params
     print("AD")
 

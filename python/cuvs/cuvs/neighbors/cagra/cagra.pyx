@@ -197,6 +197,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
 
     cdef cuvsResources_t* res_
+    cdef cuvsError_t cstat
     print("A")
     if resources is None:
         cstat = cuvsResourcesCreate(res_)

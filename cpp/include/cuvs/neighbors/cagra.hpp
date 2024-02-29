@@ -216,6 +216,7 @@ struct index : ann::index {
       raft_index_(std::make_unique<raft::neighbors::cagra::index<T, IdxT>>(
         res, static_cast<raft::distance::DistanceType>((int)metric)))
   {
+    std::cout << "Empty Index" << std::endl;
   }
   /** Construct an index from dataset and knn_graph arrays
    *

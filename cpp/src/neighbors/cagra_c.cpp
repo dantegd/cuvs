@@ -38,29 +38,29 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
   std::cout << "cagra_c.cpp 2" << std::endl;
   auto res_ptr = reinterpret_cast<raft::resources*>(res);
   std::cout << "cagra_c.cpp 3" << std::endl;
-  auto index   = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
+  // auto index   = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
 
   std::cout << "cagra_c.cpp 4" << std::endl;
-  auto build_params                      = cuvs::neighbors::cagra::index_params();
-  build_params.intermediate_graph_degree = params.intermediate_graph_degree;
-  build_params.graph_degree              = params.graph_degree;
-  build_params.build_algo =
-    static_cast<cuvs::neighbors::cagra::graph_build_algo>(params.build_algo);
-  build_params.nn_descent_niter = params.nn_descent_niter;
+  // auto build_params                      = cuvs::neighbors::cagra::index_params();
+  // build_params.intermediate_graph_degree = params.intermediate_graph_degree;
+  // build_params.graph_degree              = params.graph_degree;
+  // build_params.build_algo =
+  //   static_cast<cuvs::neighbors::cagra::graph_build_algo>(params.build_algo);
+  // build_params.nn_descent_niter = params.nn_descent_niter;
 
-  if (cuvs::core::is_dlpack_device_compatible(dataset)) {
-    using mdspan_type = raft::device_matrix_view<T const, int64_t, raft::row_major>;
-    std::cout << "cagra_c.cpp 5" << std::endl;
-    auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
-    cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
-  } else if (cuvs::core::is_dlpack_host_compatible(dataset)) {
-    using mdspan_type = raft::host_matrix_view<T const, int64_t, raft::row_major>;
-    std::cout << "cagra_c.cpp 6" << std::endl;
-    auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
-    cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
-  }
+  // if (cuvs::core::is_dlpack_device_compatible(dataset)) {
+  //   using mdspan_type = raft::device_matrix_view<T const, int64_t, raft::row_major>;
+  //   std::cout << "cagra_c.cpp 5" << std::endl;
+  //   auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
+  //   cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
+  // } else if (cuvs::core::is_dlpack_host_compatible(dataset)) {
+  //   using mdspan_type = raft::host_matrix_view<T const, int64_t, raft::row_major>;
+  //   std::cout << "cagra_c.cpp 6" << std::endl;
+  //   auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
+  //   cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
+  // }
 
-  return index;
+  return (void *) 0;
 }
 
 template <typename T>

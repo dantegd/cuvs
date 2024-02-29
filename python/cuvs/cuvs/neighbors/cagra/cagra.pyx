@@ -78,7 +78,7 @@ cdef class IndexParams:
                  metric="sqeuclidean",
                  intermediate_graph_degree=128,
                  graph_degree=64,
-                 build_algo="nn_descent",
+                 build_algo="ivf_pq",
                  nn_descent_niter=20):
 
         cuvsCagraIndexParamsCreate(&self.params)
@@ -196,12 +196,12 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
 
     cdef cuvsResources_t res_
-    cdef cuvsError_t cstat
+    # cdef cuvsError_t cstat
 
     # if resources is None:
-    cstat = cuvsResourcesCreate(&res_)
-    if cstat == cuvsError_t.CUVS_ERROR:
-        raise RuntimeError("Error creating Device Reources.")
+    # cstat = cuvsResourcesCreate(&res_)
+    # if cstat == cuvsError_t.CUVS_ERROR:
+    #     raise RuntimeError("Error creating Device Reources.")
 
 
 

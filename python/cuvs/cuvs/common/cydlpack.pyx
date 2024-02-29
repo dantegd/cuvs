@@ -91,8 +91,6 @@ cdef DLManagedTensor* dlpack_c(ary):
 
     print(ndim, ary.shape)
 
-
-
     tensor_ptr = ary.data
     print("@@@@@: ", ary.ai_)
 

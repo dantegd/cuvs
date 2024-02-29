@@ -73,7 +73,7 @@ cdef DLManagedTensor dlpack_c(ary):
     dlm.manager_ctx = NULL
     dlm.deleter = deleter
 
-    print(tensor.data)
-    print(tensor.dtype.bits)
+    print(tensor_ptr)
+    print "{0:x}".format(<unsigned int>tensor.data)
 
     return dlm

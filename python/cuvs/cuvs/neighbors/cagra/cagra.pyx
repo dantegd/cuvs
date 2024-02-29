@@ -225,33 +225,33 @@ def build_index(IndexParams index_params, dataset, resources=None):
     print(resources_)
     print(ptr2)
 
-    # cdef Index idx = Index()
-    # print("AA")
-    # cdef cuvsError_t build_status
-    # print("AB")
-    # cdef cydlpack.DLManagedTensor dataset_dlpack = \
-    #     cydlpack.dlpack_c(dataset_ai)
-    # print("AC")
-    # cdef cuvsCagraIndexParams* params = index_params.params
-    # print("AD")
+    cdef Index idx = Index()
+    print("AA")
+    cdef cuvsError_t build_status
+    print("AB")
+    cdef cydlpack.DLManagedTensor dataset_dlpack = \
+        cydlpack.dlpack_c(dataset_ai)
+    print("AC")
+    cdef cuvsCagraIndexParams* params = index_params.params
+    print("AD")
 
-    # # print(resources_)
+    # print(resources_)
 
-    # with cuda_interruptible():
-    #     print("AE")
-    #     build_status = cuvsCagraBuild(
-    #         res_,
-    #         params,
-    #         &dataset_dlpack,
-    #         idx.index
-    #     )
+    with cuda_interruptible():
+        print("AE")
+        build_status = cuvsCagraBuild(
+            resources_,
+            params,
+            &dataset_dlpack,
+            idx.index
+        )
 
-    #     if build_status == cuvsError_t.CUVS_ERROR:
-    #         raise RuntimeError("Index failed to build.")
-    #     else:
-    #         idx.trained = True
+        if build_status == cuvsError_t.CUVS_ERROR:
+            raise RuntimeError("Index failed to build.")
+        else:
+            idx.trained = True
 
-    # return idx
+    return idx
 
 
 cdef class SearchParams:

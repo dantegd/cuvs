@@ -200,6 +200,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
     print("A")
     if resources is None:
         cstat = cuvsResourcesCreate(resources_)
+     if cstat == cuvsError_t.CUVS_ERROR:
+        raise RuntimeError("Index failed to build.")
     print(cstat)
 
     cdef Index idx = Index()
@@ -215,6 +217,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     # print(resources_)
 
     with cuda_interruptible():
+        print("AE")
         build_status = cuvsCagraBuild(
             deref(resources_),
             params,

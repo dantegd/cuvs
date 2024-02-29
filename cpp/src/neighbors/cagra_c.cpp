@@ -36,9 +36,9 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
   auto dataset = dataset_tensor->dl_tensor;
 
   std::cout << "cagra_c.cpp 2" << std::endl;
-  auto res_ptr = reinterpret_cast<raft::resources*>(res);
+  auto res_ptr = static_cast<raft::resources*>(res);
   std::cout << "cagra_c.cpp 3: res_ptr " << res_ptr << std::endl;
-  // auto index   = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
+  auto index   = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
 
   std::cout << "cagra_c.cpp 4" << std::endl;
   auto build_params                      = cuvs::neighbors::cagra::index_params();

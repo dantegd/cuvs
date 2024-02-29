@@ -198,21 +198,15 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     cdef cuvsResources_t res_
     cdef cuvsError_t cstat
-    print("A")
-    # if resources is None:
-    cstat = cuvsResourcesCreate(&res_)
-    if cstat == cuvsError_t.CUVS_SUCCESS:
-        print("yay")
-    elif cstat == cuvsError_t.CUVS_ERROR:
-        print("wtf")
-    else:
-        print(cstat)
 
-    print(<uintptr_t>res_)
+    if resources is None:
+        cstat = cuvsResourcesCreate(&res_)
+        if cstat == cuvsError_t.CUVS_ERROR:
+            raise RuntimeError("Error creating Device Reources.")
+
     # cdef uintptr_t resources_ = <uintptr_t> res_
     # if cstat == cuvsError_t.CUVS_ERROR:
     #     raise RuntimeError("Index failed to build.")
-    # print(cstat)
     # if resources is None:
     #     resources = DeviceResources()
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
@@ -222,23 +216,15 @@ def build_index(IndexParams index_params, dataset, resources=None):
     cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
     cdef size_t ptr2 = resources.getHandle()
 
-    print(resources_)
-    print(ptr2)
 
     cdef Index idx = Index()
-    print("AA")
     cdef cuvsError_t build_status
-    print("AB")
     cdef cydlpack.DLManagedTensor dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
-    print("AC")
     cdef cuvsCagraIndexParams* params = index_params.params
-    print("AD")
 
-    # print(resources_)
 
     with cuda_interruptible():
-        print("AE")
         build_status = cuvsCagraBuild(
             res_,
             params,

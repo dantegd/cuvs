@@ -203,10 +203,14 @@ def build_index(IndexParams index_params, dataset, resources=None):
     print(cstat)
 
     cdef Index idx = Index()
+    print("AA")
     cdef cuvsError_t build_status
+    print("AB")
     cdef cydlpack.DLManagedTensor dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
+        print("AC")
     cdef cuvsCagraIndexParams* params = index_params.params
+    print("AD")
 
     # print(resources_)
 

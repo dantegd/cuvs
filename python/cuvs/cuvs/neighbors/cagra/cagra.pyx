@@ -212,7 +212,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     resources = DeviceResources()
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
-    res_ = <uintptr_t> resources.getHandle()
+    res_ = <cuvsResources_t> resources.getHandle()
 
     # if resources is None:
     # resources = DeviceResources()

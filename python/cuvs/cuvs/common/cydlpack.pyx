@@ -100,7 +100,7 @@ cdef DLManagedTensor dlpack_c(ary):
     print("dtype: ", dtype)
     print("strides: ", NULL)
     print("ndim: ", ndim)
-    print("shape: ", shape)
+    print("shape: ", ary.shape)
     print("byte_offset: ", 0)
 
 

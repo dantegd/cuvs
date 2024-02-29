@@ -46,7 +46,6 @@ from libc.stdint cimport (
     uint64_t,
     uintptr_t,
 )
-from pylibraft.common.resources cimport device_resources
 
 from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t, cuvsResourcesCreate
 

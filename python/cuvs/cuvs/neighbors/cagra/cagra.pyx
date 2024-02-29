@@ -196,8 +196,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     if resources is None:
         resources = DeviceResources()
-    cdef cuvsResources_t* resources_ = \
-        <cuvsResources_t*><size_t>resources.getHandle()
+    cdef uintptr_t resources_ = resources.getHandle()
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status
@@ -209,7 +208,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     with cuda_interruptible():
         build_status = cuvsCagraBuild(
-            deref(resources_),
+            resources_,
             params,
             &dataset_dlpack,
             idx.index

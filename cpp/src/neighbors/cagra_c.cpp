@@ -59,7 +59,7 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
     auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }
-
+  std::cout << "cagra_c.cpp 7" << std::endl;
   return (void *) index;
 }
 

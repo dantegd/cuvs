@@ -483,8 +483,7 @@ def search(SearchParams search_params,
     # in RAFT to make this a single call
     queries_cai = cai_wrapper(queries)
     _check_input_array(queries_cai, [np.dtype('float32'), np.dtype('byte'),
-                                     np.dtype('ubyte')],
-                       exp_cols=index.dim)
+                                     np.dtype('ubyte')])
 
     cdef uint32_t n_queries = queries_cai.shape[0]
 

@@ -86,7 +86,7 @@ cdef DLManagedTensor* dlpack_c(ary):
 
 
     tensor_ptr = ary.data
-    print("@@@@@: " ary.ai_)
+    print("@@@@@: ", ary.ai_)
 
     tensor.data = <void*> tensor_ptr
     tensor.device = dev

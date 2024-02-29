@@ -51,7 +51,7 @@ TEST(CagraC, BuildSearch)
   // create dataset DLTensor
   DLManagedTensor dataset_tensor;
   dataset_tensor.dl_tensor.data               = dataset_d;
-  dataset_tensor.dl_tensor.device.device_type = kDLGPU;
+  dataset_tensor.dl_tensor.device.device_type = kDLCUDA;
   dataset_tensor.dl_tensor.ndim               = 2;
   dataset_tensor.dl_tensor.dtype.code         = kDLFloat;
   dataset_tensor.dl_tensor.dtype.bits         = 32;

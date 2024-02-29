@@ -48,7 +48,7 @@ from libc.stdint cimport (
 )
 from pylibraft.common.handle cimport device_resources
 
-from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t
+from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t, cuvsResourcesCreate
 
 
 cdef class IndexParams:
@@ -195,9 +195,11 @@ def build_index(IndexParams index_params, dataset, resources=None):
     _check_input_array(dataset_ai, [np.dtype('float32'), np.dtype('byte'),
                                     np.dtype('ubyte')])
 
+
+    cdef uintptr_t resources_
     if resources is None:
-        resources = DeviceResources()
-    cdef uintptr_t resources_ = cast.reinterpret_cast[uintptr_t](<void *>resources.getHandle())
+        resources = cuvsResourcesCreate(cuvsResources_t* res)
+    # cdef size_t resources_ = <size_t> resources.getHandle()
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status

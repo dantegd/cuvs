@@ -213,6 +213,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
     # if resources is None:
     resources = DeviceResources()
     cdef uintptr_t res_ = <uintptr_t> resources.getHandle()
+    resources.sync()
 
 
     cdef Index idx = Index()

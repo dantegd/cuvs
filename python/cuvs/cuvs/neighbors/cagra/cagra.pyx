@@ -112,7 +112,7 @@ cdef class IndexParams:
 
 
 cdef class Index:
-    cdef cagraIndex_t index
+    cdef cuvsCagraIndex_t index
 
     def __cinit__(self):
         cdef cuvsError_t index_create_status

@@ -66,24 +66,24 @@ cdef extern from "cuvs/neighbors/cagra.h" nogil:
         uint32_t num_random_samplings
         uint64_t rand_xor_mask
 
-    ctypedef struct cagraIndex:
+    ctypedef struct cuvsCagraIndex:
         uintptr_t addr
         DLDataType dtype
 
-    ctypedef cagraIndex* cagraIndex_t
+    ctypedef cuvsCagraIndex* cuvsCagraIndex_t
 
-    cuvsError_t cuvsCagraIndexCreate(cagraIndex_t* index)
+    cuvsError_t cuvsCagraIndexCreate(cuvsCagraIndex_t* index)
 
-    cuvsError_t cuvsCagraIndexDestroy(cagraIndex_t index)
+    cuvsError_t cuvsCagraIndexDestroy(cuvsCagraIndex_t index)
 
     cuvsError_t cuvsCagraBuild(cuvsResources_t res,
                            cuvsCagraIndexParams* params,
                            DLManagedTensor* dataset,
-                           cagraIndex_t index)
+                           cuvsCagraIndex_t index)
 
     cuvsError_t cuvsCagraSearch(cuvsResources_t res,
                             cuvsCagraSearchParams* params,
-                            cagraIndex_t index,
+                            cuvsCagraIndex_t index,
                             DLManagedTensor* queries,
                             DLManagedTensor* neighbors,
                             DLManagedTensor* distances)

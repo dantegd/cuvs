@@ -199,14 +199,14 @@ def build_index(IndexParams index_params, dataset, resources=None):
     cdef cuvsResources_t* res_
     cdef cuvsError_t cstat
     print("A")
-    if resources is None:
-        cstat = cuvsResourcesCreate(res_)
-    if cstat == cuvsError_t.CUVS_SUCCESS:
-        print("yay")
-    elif cstat == cuvsError_t.CUVS_ERROR:
-        print("wtf")
-    else:
-        print(cstat)
+    # if resources is None:
+    # cstat = cuvsResourcesCreate(res_)
+    # if cstat == cuvsError_t.CUVS_SUCCESS:
+    #     print("yay")
+    # elif cstat == cuvsError_t.CUVS_ERROR:
+    #     print("wtf")
+    # else:
+    #     print(cstat)
 
     print(<uintptr_t>res_)
     # cdef uintptr_t resources_ = <uintptr_t> res_
@@ -217,8 +217,8 @@ def build_index(IndexParams index_params, dataset, resources=None):
     #     resources = DeviceResources()
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
-    if resources is None:
-        resources = DeviceResources()
+    # if resources is None:
+    resources = DeviceResources()
     cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
     cdef size_t ptr2 = resources.getHandle()
 

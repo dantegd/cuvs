@@ -207,7 +207,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
 
     with cuda_interruptible():
         build_status = cuvsCagraBuild(
-            deref(resources_),
+            resources_,
             params,
             &dataset_dlpack,
             idx.index

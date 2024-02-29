@@ -205,7 +205,7 @@ def build_index(IndexParams index_params, dataset, resources=None):
         cydlpack.dlpack_c(dataset_ai)
     cdef cuvsCagraIndexParams* params = index_params.params
 
-    print(resources_)
+    print(resources.getHandle())
 
     with cuda_interruptible():
         build_status = cuvsCagraBuild(

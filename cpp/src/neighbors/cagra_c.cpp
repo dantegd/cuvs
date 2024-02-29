@@ -142,7 +142,9 @@ extern "C" cuvsError_t cuvsCagraBuild(cuvsResources_t res,
                                       cuvsCagraIndex_t index)
 {
   try {
+    std::cout << "cuvsCagraBuild.cpp 2" << std::endl;
     auto dataset = dataset_tensor->dl_tensor;
+    std::cout << "cuvsCagraBuild.cpp 3" << std::endl;
 
     if (dataset.dtype.code == kDLFloat && dataset.dtype.bits == 32) {
       index->addr       = reinterpret_cast<uintptr_t>(_build<float>(res, *params, dataset_tensor));

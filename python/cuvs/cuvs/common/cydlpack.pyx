@@ -95,13 +95,13 @@ cdef DLManagedTensor dlpack_c(ary):
     tensor.shape = shape
     tensor.byte_offset = 0
 
-    print("data: ", ary.data)
-    print("device: ", dev)
-    print("dtype: ", dtype)
-    print("strides: ", "NULL")
-    print("ndim: ", ndim)
-    print("shape: ", ary.shape)
-    print("byte_offset: ", 0)
+    print("tensor.data: ", ary.data)
+    print("tensor.device: ", dev)
+    print("tensor.dtype: ", dtype)
+    print("tensor.strides: ", "NULL")
+    print("tensor.ndim: ", ndim)
+    print("tensor.shape: ", ary.shape)
+    print("tensor.byte_offset: ", 0)
 
 
     dlm.dl_tensor = tensor

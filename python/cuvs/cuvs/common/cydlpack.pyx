@@ -70,7 +70,7 @@ cdef DLManagedTensor dlpack_c(ary):
     cdef int64_t* shape = <int64_t*>stdlib.malloc(ndim * sizeof(int64_t))
 
     for n in range(ndim):
-        shape[n] = ary._shape[n]
+        shape[n] = ary.shape[n]
 
     tensor.shape = shape
 

@@ -32,13 +32,14 @@ namespace {
 template <typename T>
 void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* dataset_tensor)
 {
-  std::cout << "cagra_c.cpp 1: " << res  << "dataset_tensor->dl_tensor.data  " << dataset_tensor->dl_tensor.data << std::endl;
+  std::cout << "cagra_c.cpp 1: " << res << "dataset_tensor->dl_tensor.data  "
+            << dataset_tensor->dl_tensor.data << std::endl;
   auto dataset = dataset_tensor->dl_tensor;
 
   std::cout << "cagra_c.cpp 2" << std::endl;
   auto res_ptr = reinterpret_cast<raft::resources*>(res);
   std::cout << "cagra_c.cpp 3: res_ptr " << res_ptr << std::endl;
-  auto index   = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
+  auto index = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
 
   std::cout << "cagra_c.cpp 4" << std::endl;
   auto build_params                      = cuvs::neighbors::cagra::index_params();
@@ -51,16 +52,16 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
   if (cuvs::core::is_dlpack_device_compatible(dataset)) {
     using mdspan_type = raft::device_matrix_view<T const, int64_t, raft::row_major>;
     std::cout << "cagra_c.cpp 5" << std::endl;
-    auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
+    auto mds = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
   } else if (cuvs::core::is_dlpack_host_compatible(dataset)) {
     using mdspan_type = raft::host_matrix_view<T const, int64_t, raft::row_major>;
     std::cout << "cagra_c.cpp 6" << std::endl;
-    auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
+    auto mds = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }
   std::cout << "cagra_c.cpp 7" << std::endl;
-  return (void *) index;
+  return (void*)index;
 }
 
 template <typename T>
@@ -163,14 +164,10 @@ extern "C" cuvsError_t cuvsCagraBuild(cuvsResources_t res,
                 dataset.dtype.bits);
     }
     return CUVS_SUCCESS;
-  }
-catch(const std::exception& ex)
-{
-    // speciffic handling for all exceptions extending std::exception, except
-    // std::runtime_error which is handled explicitly
+  } catch (const std::exception& ex) {
     std::cerr << "Error occurred: " << ex.what() << std::endl;
-}
-   catch (...) {
+    return CUVS_ERROR;
+  } catch (...) {
     return CUVS_ERROR;
   }
 }
@@ -214,10 +211,7 @@ extern "C" cuvsError_t cuvsCagraSearch(cuvsResources_t res,
                 queries.dtype.bits);
     }
     return CUVS_SUCCESS;
-}  catch(const std::exception& ex)
-{
-    // speciffic handling for all exceptions extending std::exception, except
-    // std::runtime_error which is handled explicitly
+  } catch (const std::exception& ex) {
     std::cerr << "Error occurred: " << ex.what() << std::endl;
   } catch (...) {
     return CUVS_ERROR;

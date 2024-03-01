@@ -15,10 +15,4 @@
 
 from .cagra import Index, IndexParams, SearchParams, build_index, search
 
-__all__ = [
-    "Index",
-    "IndexParams",
-    "SearchParams",
-    "build_index",
-    "search"
-]
+__all__ = ["Index", "IndexParams", "SearchParams", "build_index", "search"]

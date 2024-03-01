@@ -16,10 +16,10 @@
 # cython: language_level=3
 
 import numpy as np
+
 # from libc.stdio cimport printf
 
 from libc cimport stdlib
-
 from libc.stdint cimport uintptr_t
 
 

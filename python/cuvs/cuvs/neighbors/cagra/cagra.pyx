@@ -22,18 +22,16 @@ cimport cuvs.common.cydlpack
 from cuvs.common.temp_raft import auto_sync_resources
 
 from cython.operator cimport dereference as deref
+from libcpp cimport bool, cast
 
 from cuvs.common cimport cydlpack
 
-from libcpp cimport bool
-from libcpp cimport cast
-
 from pylibraft.common import (
     DeviceResources,
+    Stream,
     auto_convert_output,
     cai_wrapper,
     device_ndarray,
-    Stream
 )
 from pylibraft.common.cai_wrapper import wrap_array
 from pylibraft.common.interruptible import cuda_interruptible
@@ -48,7 +46,11 @@ from libc.stdint cimport (
     uintptr_t,
 )
 
-from cuvs.common.c_api cimport cuvsError_t, cuvsResources_t, cuvsResourcesCreate
+from cuvs.common.c_api cimport (
+    cuvsError_t,
+    cuvsResources_t,
+    cuvsResourcesCreate,
+)
 
 
 cdef class IndexParams:

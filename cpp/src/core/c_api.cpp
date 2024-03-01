@@ -26,8 +26,8 @@ extern "C" cuvsError_t cuvsResourcesCreate(cuvsResources_t* res)
   cuvsError_t status;
   try {
     auto res_ptr = new raft::resources{};
-    *res = reinterpret_cast<uintptr_t>(res_ptr);
-    status = CUVS_SUCCESS;
+    *res         = reinterpret_cast<uintptr_t>(res_ptr);
+    status       = CUVS_SUCCESS;
   } catch (...) {
     status = CUVS_ERROR;
   }

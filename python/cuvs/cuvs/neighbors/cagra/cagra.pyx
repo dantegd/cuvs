@@ -484,9 +484,12 @@ def search(SearchParams search_params,
 
     cdef cuvsCagraSearchParams* params = &search_params.params
     cdef cuvsError_t search_status
-    cdef cydlpack.DLManagedTensor* queries_dlpack = cydlpack.dlpack_c(queries_cai)
-    cdef cydlpack.DLManagedTensor* neighbors_dlpack = cydlpack.dlpack_c(neighbors_cai)
-    cdef cydlpack.DLManagedTensor* distances_dlpack = cydlpack.dlpack_c(distances_cai)
+    cdef cydlpack.DLManagedTensor* queries_dlpack = \
+        cydlpack.dlpack_c(queries_cai)
+    cdef cydlpack.DLManagedTensor* neighbors_dlpack = \
+        cydlpack.dlpack_c(neighbors_cai)
+    cdef cydlpack.DLManagedTensor* distances_dlpack = \
+        cydlpack.dlpack_c(distances_cai)
 
     with cuda_interruptible():
         search_status = cuvsCagraSearch(

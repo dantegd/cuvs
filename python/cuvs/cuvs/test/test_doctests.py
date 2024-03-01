@@ -18,8 +18,9 @@ import doctest
 import inspect
 import io
 
-import cuvs.neighbors
 import pytest
+
+import cuvs.neighbors
 
 # Code adapted from https://github.com/rapidsai/cudf/blob/branch-23.02/python/cudf/cudf/tests/test_doctests.py  # noqa
 

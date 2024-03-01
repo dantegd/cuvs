@@ -59,6 +59,10 @@ cdef DLManagedTensor* dlpack_c(ary):
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 64
         print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
+    elif ary.dtype == np.int8:
+        dtype.code = DLDataTypeCode.kDLInt
+        dtype.bits = 8
+        print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
     elif ary.dtype == np.int32:
         dtype.code = DLDataTypeCode.kDLInt
         dtype.bits = 32
@@ -67,6 +71,9 @@ cdef DLManagedTensor* dlpack_c(ary):
         dtype.code = DLDataTypeCode.kDLInt
         dtype.bits = 64
         print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
+    elif ary.dtype == np.uint8:
+        dtype.code = DLDataTypeCode.kDLUInt
+        dtype.bits = 8
     elif ary.dtype == np.uint32:
         dtype.code = DLDataTypeCode.kDLUInt
         dtype.bits = 32

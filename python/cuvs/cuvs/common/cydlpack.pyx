@@ -93,7 +93,7 @@ cdef DLManagedTensor* dlpack_c(ary):
 
     print(ndim, ary.shape)
 
-    tensor_ptr = ary.ai["data"][0]
+    tensor_ptr = ary.ai_["data"][0]
     print("@@@@@: ", ary.ai_)
 
     tensor.data = <void*> tensor_ptr

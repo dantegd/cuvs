@@ -94,7 +94,7 @@ cdef DLManagedTensor* dlpack_c(ary):
     tensor_ptr = ary.data
     print("@@@@@: ", ary.ai_)
 
-    tensor.data = tensor_ptr
+    tensor.data = <void*> tensor_ptr
     tensor.device = dev
     tensor.dtype = dtype
     tensor.strides = NULL

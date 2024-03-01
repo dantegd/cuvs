@@ -33,7 +33,7 @@ project(
             C CXX CUDA
 )
 
-option(FIND_CUVS_CPP "Search wha existing CUVS C++ installations before defaulting to local files"
+option(FIND_CUVS_CPP "Search for existing CUVS C++ installations before defaulting to local files"
        OFF
 )
 

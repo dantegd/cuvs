@@ -32,7 +32,6 @@ namespace {
 template <typename T>
 void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* dataset_tensor)
 {
-  << dataset_tensor->dl_tensor.data << std::endl;
   auto dataset = dataset_tensor->dl_tensor;
 
   auto res_ptr = reinterpret_cast<raft::resources*>(res);
@@ -54,7 +53,7 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
     auto mds          = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }
-  return (void*)index;
+  return index;
 }
 
 template <typename T>

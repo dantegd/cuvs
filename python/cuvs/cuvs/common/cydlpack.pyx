@@ -106,7 +106,7 @@ cdef DLManagedTensor* dlpack_c(ary):
 
     print("tensor.data: ", ary.data)
     # print("C++ tensor.data: ", tensor.data)
-    print "{}".format(<void*>tensor.data)
+    print("{}".format(<void*>tensor.data))
     print("tensor.device: ", dev)
     print("tensor.dtype: ", dtype)
     print("tensor.strides: ", "NULL")

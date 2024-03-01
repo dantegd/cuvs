@@ -20,6 +20,8 @@ import numpy as np
 
 from libc cimport stdlib
 
+from libc.stdint cimport uintptr_t
+
 
 cdef void deleter(DLManagedTensor* tensor) noexcept:
     if tensor.manager_ctx is NULL:

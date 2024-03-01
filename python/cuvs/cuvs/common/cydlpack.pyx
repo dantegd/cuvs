@@ -91,7 +91,7 @@ cdef DLManagedTensor* dlpack_c(ary):
 
     print(ndim, ary.shape)
 
-    tensor_ptr = int(ary.data)
+    tensor_ptr = ary.data
     print("@@@@@: ", ary.ai_)
 
     tensor.data = tensor_ptr
@@ -103,6 +103,7 @@ cdef DLManagedTensor* dlpack_c(ary):
     tensor.byte_offset = 0
 
     print("tensor.data: ", ary.data)
+    print("C++ tensor.data: ", tensor.data)
     print("tensor.device: ", dev)
     print("tensor.dtype: ", dtype)
     print("tensor.strides: ", "NULL")

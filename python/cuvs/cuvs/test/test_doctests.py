@@ -87,7 +87,7 @@ def _find_doctests_in_obj(obj, finder=None, criteria=None):
 # since the root pylibraft module doesn't import submodules (or define an
 # __all__) we are explicitly adding all the submodules we want to run
 # doctests for here
-DOC_STRINGS.extend(_find_doctests_in_obj(cuvs.neighbors))
+DOC_STRINGS = list(_find_doctests_in_obj(cuvs.neighbors))
 DOC_STRINGS.extend(_find_doctests_in_obj(cuvs.neighbors.cagra))
 
 

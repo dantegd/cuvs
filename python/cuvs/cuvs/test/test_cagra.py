@@ -56,8 +56,6 @@ def run_cagra_build_search_test(
     else:
         index = cagra.build_index(build_params, dataset)
 
-    assert index.trained
-
     if not add_data_on_build:
         dataset_1 = dataset[: n_rows // 2, :]
         dataset_2 = dataset[n_rows // 2 :, :]

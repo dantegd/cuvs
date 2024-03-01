@@ -421,16 +421,14 @@ def search(SearchParams search_params,
     Examples
     --------
     >>> import cupy as cp
-    >>> from pylibraft.common import DeviceResources
-    >>> from pylibraft.neighbors import cagra
+    >>> from cuvs.neighbors import cagra
     >>> n_samples = 50000
     >>> n_features = 50
     >>> n_queries = 1000
     >>> dataset = cp.random.random_sample((n_samples, n_features),
     ...                                   dtype=cp.float32)
     >>> # Build index
-    >>> resources = DeviceResources()
-    >>> index = cagra.build(cagra.IndexParams(), dataset, resources=resources)
+    >>> index = cagra.build_index(cagra.IndexParams(), dataset)
     >>> # Search using the built index
     >>> queries = cp.random.random_sample((n_queries, n_features),
     ...                                   dtype=cp.float32)
@@ -443,10 +441,7 @@ def search(SearchParams search_params,
     >>> # creation during search. This is useful if multiple searches
     >>> # are performad with same query size.
     >>> distances, neighbors = cagra.search(search_params, index, queries,
-    ...                                     k, resources=resources)
-    >>> # pylibraft functions are often asynchronous so the
-    >>> # resources needs to be explicitly synchronized
-    >>> resources.sync()
+    ...                                     k)
     >>> neighbors = cp.asarray(neighbors)
     >>> distances = cp.asarray(distances)
     """

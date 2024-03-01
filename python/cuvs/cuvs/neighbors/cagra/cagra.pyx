@@ -196,16 +196,16 @@ def build_index(IndexParams index_params, dataset, resources=None):
                                     np.dtype('ubyte')])
 
 
-    # cdef cuvsResources_t res_
-    # cdef cuvsError_t cstat
+    cdef cuvsResources_t res_
+    cdef cuvsError_t cstat
 
     # if resources is None:
-    # cstat = cuvsResourcesCreate(&res_)
+    cstat = cuvsResourcesCreate(&res_)
 
     # if resources is not None:
 
-    # if cstat == cuvsError_t.CUVS_ERROR:
-    #     raise RuntimeError("Error creating Device Reources.")
+    if cstat == cuvsError_t.CUVS_ERROR:
+        raise RuntimeError("Error creating Device Reources.")
 
 
 
@@ -218,10 +218,10 @@ def build_index(IndexParams index_params, dataset, resources=None):
     # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
     # res_ = <cuvsResources_t> resources.getHandle()
-    if resources is None:
-        resources = DeviceResources()
-    cdef cuvsResources_t res_ = \
-        <cuvsResources_t><size_t>resources.getHandle()
+    # if resources is None:
+    #     resources = DeviceResources()
+    # cdef cuvsResources_t res_ = \
+    #     <cuvsResources_t><size_t>resources.getHandle()
     print("res_: ", res_)
 
     # if resources is None:

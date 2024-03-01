@@ -32,16 +32,12 @@ namespace {
 template <typename T>
 void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* dataset_tensor)
 {
-  std::cout << "cagra_c.cpp 1: " << res << "dataset_tensor->dl_tensor.data  "
             << dataset_tensor->dl_tensor.data << std::endl;
   auto dataset = dataset_tensor->dl_tensor;
 
-  std::cout << "cagra_c.cpp 2" << std::endl;
   auto res_ptr = reinterpret_cast<raft::resources*>(res);
-  std::cout << "cagra_c.cpp 3: res_ptr " << res_ptr << std::endl;
   auto index = new cuvs::neighbors::cagra::index<T, uint32_t>(*res_ptr);
 
-  std::cout << "cagra_c.cpp 4" << std::endl;
   auto build_params                      = cuvs::neighbors::cagra::index_params();
   build_params.intermediate_graph_degree = params.intermediate_graph_degree;
   build_params.graph_degree              = params.graph_degree;
@@ -51,16 +47,13 @@ void* _build(cuvsResources_t res, cuvsCagraIndexParams params, DLManagedTensor* 
 
   if (cuvs::core::is_dlpack_device_compatible(dataset)) {
     using mdspan_type = raft::device_matrix_view<T const, int64_t, raft::row_major>;
-    std::cout << "cagra_c.cpp 5" << std::endl;
     auto mds = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_device(*res_ptr, build_params, mds, *index);
   } else if (cuvs::core::is_dlpack_host_compatible(dataset)) {
     using mdspan_type = raft::host_matrix_view<T const, int64_t, raft::row_major>;
-    std::cout << "cagra_c.cpp 6" << std::endl;
     auto mds = cuvs::core::from_dlpack<mdspan_type>(dataset_tensor);
     cuvs::neighbors::cagra::build_host(*res_ptr, build_params, mds, *index);
   }
-  std::cout << "cagra_c.cpp 7" << std::endl;
   return (void*)index;
 }
 
@@ -105,9 +98,7 @@ void _search(cuvsResources_t res,
 extern "C" cuvsError_t cuvsCagraIndexCreate(cuvsCagraIndex_t* index)
 {
   try {
-    std::cout << "cuvsCagraIndexCreate.cpp 2" << std::endl;
     *index = new cuvsCagraIndex{};
-    std::cout << "cuvsCagraIndexCreate.cpp 2" << std::endl;
     return CUVS_SUCCESS;
   } catch (...) {
     return CUVS_ERROR;
@@ -145,9 +136,7 @@ extern "C" cuvsError_t cuvsCagraBuild(cuvsResources_t res,
                                       cuvsCagraIndex_t index)
 {
   try {
-    std::cout << "cuvsCagraBuild.cpp 2" << std::endl;
     auto dataset = dataset_tensor->dl_tensor;
-    std::cout << "cuvsCagraBuild.cpp 3" << std::endl;
 
     if (dataset.dtype.code == kDLFloat && dataset.dtype.bits == 32) {
       index->addr       = reinterpret_cast<uintptr_t>(_build<float>(res, *params, dataset_tensor));

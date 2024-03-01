@@ -17,8 +17,6 @@
 
 import numpy as np
 
-# from libc.stdio cimport printf
-
 from libc cimport stdlib
 from libc.stdint cimport uintptr_t
 
@@ -41,10 +39,8 @@ cdef DLManagedTensor* dlpack_c(ary):
         <DLManagedTensor*>stdlib.malloc(sizeof(DLManagedTensor))
 
     if ary.from_cai:
-        print("A")
         dev_type = DLDeviceType.kDLCUDA
     else:
-        print("B")
         dev_type = DLDeviceType.kDLCPU
 
     dev.device_type = dev_type
@@ -54,42 +50,32 @@ cdef DLManagedTensor* dlpack_c(ary):
     if ary.dtype == np.float32:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 32
-        print("dtype 1: ", DLDataTypeCode.kDLFloat, 32)
     elif ary.dtype == np.float64:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 64
-        print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.int8:
         dtype.code = DLDataTypeCode.kDLInt
         dtype.bits = 8
-        print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
     elif ary.dtype == np.int32:
         dtype.code = DLDataTypeCode.kDLInt
         dtype.bits = 32
-        print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
     elif ary.dtype == np.int64:
         dtype.code = DLDataTypeCode.kDLInt
         dtype.bits = 64
-        print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.uint8:
         dtype.code = DLDataTypeCode.kDLUInt
         dtype.bits = 8
     elif ary.dtype == np.uint32:
         dtype.code = DLDataTypeCode.kDLUInt
         dtype.bits = 32
-        print("dtype 1: ", DLDataTypeCode.kDLInt, 32)
     elif ary.dtype == np.uint64:
         dtype.code = DLDataTypeCode.kDLUInt
         dtype.bits = 64
-        print("dtype 1: ", DLDataTypeCode.kDLFloat, 64)
     elif ary.dtype == np.bool_:
         dtype.code = DLDataTypeCode.kDLFloat
         dtype.bits = 8
-        print("dtype 1: ", DLDataTypeCode.kDLFloat, 16)
 
     dtype.lanes = 1
-
-
 
     cdef size_t ndim = len(ary.shape)
 
@@ -98,11 +84,8 @@ cdef DLManagedTensor* dlpack_c(ary):
     for i in range(ndim):
         shape[i] = ary.shape[i]
 
-    print(ndim, ary.shape)
-
     cdef uintptr_t tensor_ptr
     tensor_ptr = <uintptr_t>ary.ai_["data"][0]
-    print("@@@@@: ", ary.ai_)
 
     tensor.data = <void*> tensor_ptr
     tensor.device = dev
@@ -112,21 +95,8 @@ cdef DLManagedTensor* dlpack_c(ary):
     tensor.shape = shape
     tensor.byte_offset = 0
 
-    print("tensor.data: ", ary.data)
-    # print("C++ tensor.data: ", tensor.data)
-    # print("{}".format(<void*>tensor.data))
-    print("tensor.device: ", dev)
-    print("tensor.dtype: ", dtype)
-    print("tensor.strides: ", "NULL")
-    print("tensor.ndim: ", ndim)
-    print("tensor.shape: ", ary.shape)
-    print("tensor.byte_offset: ", 0)
-
-
     dlm.dl_tensor = tensor
     dlm.manager_ctx = NULL
     dlm.deleter = deleter
-
-    # printf("%p\n", tensor.data)
 
     return dlm

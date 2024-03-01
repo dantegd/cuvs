@@ -138,6 +138,10 @@ cdef class Index:
             if index_destroy_status == cuvsError_t.CUVS_ERROR:
                 raise Exception("Failed to deallocate index.")
 
+    @property
+    def trained(self):
+        return self.trained
+
     def __repr__(self):
         # todo(dgd): update repr as we expose data through C API
         attr_str = []
@@ -174,19 +178,18 @@ def build_index(IndexParams index_params, dataset, resources=None):
     --------
 
     >>> import cupy as cp
-    >>> from pylibraft.neighbors import cagra
+    >>> from cuvs.neighbors import cagra
     >>> n_samples = 50000
     >>> n_features = 50
     >>> n_queries = 1000
     >>> k = 10
     >>> dataset = cp.random.random_sample((n_samples, n_features),
     ...                                   dtype=cp.float32)
-    >>> resources = DeviceResources()
     >>> build_params = cagra.IndexParams(metric="sqeuclidean")
     >>> index = cagra.build_index(build_params, dataset)
     >>> distances, neighbors = cagra.search(cagra.SearchParams(),
     ...                                      index, dataset,
-    ...                                      k, resources=resources)
+    ...                                      k)
     >>> distances = cp.asarray(distances)
     >>> neighbors = cp.asarray(neighbors)
     """
@@ -197,47 +200,18 @@ def build_index(IndexParams index_params, dataset, resources=None):
     _check_input_array(dataset_ai, [np.dtype('float32'), np.dtype('byte'),
                                     np.dtype('ubyte')])
 
-
     cdef cuvsResources_t res_
     cdef cuvsError_t cstat
 
-    # if resources is None:
     cstat = cuvsResourcesCreate(&res_)
-
-    # if resources is not None:
-
     if cstat == cuvsError_t.CUVS_ERROR:
         raise RuntimeError("Error creating Device Reources.")
-
-
-
-    # cdef uintptr_t resources_ = <uintptr_t> res_
-    # if cstat == cuvsError_t.CUVS_ERROR:
-    #     raise RuntimeError("Index failed to build.")
-    # if resources is None:
-    # stream = Stream()
-    # resources = DeviceResources(stream)
-    # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
-
-    # res_ = <cuvsResources_t> resources.getHandle()
-    # if resources is None:
-    #     resources = DeviceResources()
-    # cdef cuvsResources_t res_ = \
-    #     <cuvsResources_t><size_t>resources.getHandle()
-    print("res_: ", res_)
-
-    # if resources is None:
-    # resources = DeviceResources()
-    # cdef uintptr_t res_ = <uintptr_t> resources.getHandle()
-    # resources.sync()
-
 
     cdef Index idx = Index()
     cdef cuvsError_t build_status
     cdef cydlpack.DLManagedTensor* dataset_dlpack = \
         cydlpack.dlpack_c(dataset_ai)
     cdef cuvsCagraIndexParams* params = index_params.params
-
 
     with cuda_interruptible():
         build_status = cuvsCagraBuild(
@@ -478,10 +452,6 @@ def search(SearchParams search_params,
     """
     if not index.trained:
         raise ValueError("Index needs to be built before calling search.")
-
-    # if resources is None:
-    #     resources = DeviceResources()
-    # cdef uintptr_t resources_ = <uintptr_t> resources.getHandle()
 
     cdef cuvsResources_t res_
     cdef cuvsError_t cstat

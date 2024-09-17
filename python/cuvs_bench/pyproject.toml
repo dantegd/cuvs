@@ -11,7 +11,7 @@ requires = [
 [project]
 name = "cuvs-bench"
 dynamic = ["version"]
-description = "cuVS benchmarks"
+description = "RAFT ANN benchmarks"
 authors = [
     { name = "NVIDIA Corporation" },
 ]
@@ -33,8 +33,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/rapidsai/raft"
 
-[tool.setuptools.packages.find]
-where = ["src"]
 
 [tool.setuptools.package-data]
 "*" = ["*.*", "VERSION"]
@@ -64,7 +62,8 @@ skip = [
 version = { file = "cuvs_bench/VERSION" }
 
 [tool.rapids-build-backend]
-build-backend = "scikit_build_core.build"
+build-backend = "setuptools.build_meta"
 requires = []
 dependencies-file = "../../dependencies.yaml"
+commit-files = ["src/cuvs_bench/GIT_COMMIT"]
 matrix-entry = "cuda_suffixed=true"

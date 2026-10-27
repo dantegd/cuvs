@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "fused_topk_merge.cuh"
+#include "fused_topk_register_merge.cuh"
+#include "fused_topk_subgroup_merge.cuh"
 #include "fused_topk_tile.hpp"
 
 #include "fused_topk_pk4_planner.hpp"
@@ -301,6 +304,67 @@ bool launch_and_convert(IdxT* neighbors,
                                                    metric,
                                                    stream)) {
     return false;
+  }
+  if constexpr (PhysicalK == 2 || PhysicalK == 4) {
+    // Capacity-only merge of sorted lists; no benchmark shape allowlist.
+    if (num_splits >= 2 && num_splits <= 128) {
+      const bool inner = metric == cuvs::distance::DistanceType::InnerProduct;
+      if (num_splits == 2) {
+        const int blocks = fused_topk_merge_block_count(query_rows);
+        merge_fused_topk_register_heads<PhysicalK, 2><<<blocks, 256, 0, stream>>>(neighbors,
+                                                                                  distances,
+                                                                                  partial.indices,
+                                                                                  partial.distances,
+                                                                                  query_rows,
+                                                                                  logical_k,
+                                                                                  num_splits,
+                                                                                  inner);
+      } else if (num_splits <= 4) {
+        const int blocks = fused_topk_merge_block_count(query_rows);
+        merge_fused_topk_register_heads<PhysicalK, 4><<<blocks, 256, 0, stream>>>(neighbors,
+                                                                                  distances,
+                                                                                  partial.indices,
+                                                                                  partial.distances,
+                                                                                  query_rows,
+                                                                                  logical_k,
+                                                                                  num_splits,
+                                                                                  inner);
+      } else if (num_splits <= 8) {
+        const int blocks =
+          static_cast<int>(std::min<int64_t>((int64_t(query_rows) + 31) / 32, 65535));
+        merge_fused_topk_subgroups<PhysicalK, 8><<<blocks, 256, 0, stream>>>(neighbors,
+                                                                             distances,
+                                                                             partial.indices,
+                                                                             partial.distances,
+                                                                             query_rows,
+                                                                             logical_k,
+                                                                             num_splits,
+                                                                             inner);
+      } else if (num_splits <= 16) {
+        const int blocks =
+          static_cast<int>(std::min<int64_t>((int64_t(query_rows) + 15) / 16, 65535));
+        merge_fused_topk_subgroups<PhysicalK, 16><<<blocks, 256, 0, stream>>>(neighbors,
+                                                                              distances,
+                                                                              partial.indices,
+                                                                              partial.distances,
+                                                                              query_rows,
+                                                                              logical_k,
+                                                                              num_splits,
+                                                                              inner);
+      } else {
+        const int blocks = std::min(query_rows, 65535);
+        merge_fused_topk_sorted_splits<PhysicalK><<<blocks, 32, 0, stream>>>(neighbors,
+                                                                             distances,
+                                                                             partial.indices,
+                                                                             partial.distances,
+                                                                             query_rows,
+                                                                             logical_k,
+                                                                             num_splits,
+                                                                             inner);
+      }
+      RAFT_CUDA_TRY(cudaGetLastError());
+      return true;
+    }
   }
   constexpr int threads = 256;
   const int blocks      = fused_topk_merge_block_count(query_rows);

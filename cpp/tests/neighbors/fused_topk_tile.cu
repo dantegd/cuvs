@@ -4,6 +4,7 @@
  */
 
 #include "../../src/neighbors/detail/cutile_topk/fused_topk_tile.hpp"
+#include "fused_topk_merge_test.cuh"
 
 #include <cuvs/neighbors/all_neighbors.hpp>
 #include <cuvs/neighbors/brute_force.hpp>

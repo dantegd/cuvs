@@ -23,4 +23,16 @@ struct fragment_tag_fused_topk_cubin {
   static constexpr int physical_k = PhysicalK;
 };
 
+enum class fused_topk_stage { select, refine, witness };
+
+template <typename DataTag,
+          typename IndexTag,
+          int PhysicalK,
+          typename TileTag,
+          typename AbiTag,
+          typename ArchTag,
+          fused_topk_stage Stage>
+struct fragment_tag_fused_topk_stage_cubin
+  : fragment_tag_fused_topk_cubin<DataTag, IndexTag, PhysicalK, TileTag, AbiTag, ArchTag> {};
+
 }  // namespace cuvs::neighbors::detail

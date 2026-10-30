@@ -87,7 +87,10 @@ def _kernel_signature(
     gpu_code: str,
     matrix_layout: str,
     data_type: str = "float",
+    stage: str = "fused",
 ) -> KernelSignature:
+    if stage not in ("fused", "select", "refine", "witness"):
+        raise ValueError(f"Unsupported stage {stage!r}")
     matrix = _matrix_constraint(
         gpu_code=gpu_code,
         require_tma_friendly_pitch=matrix_layout == "strict",
@@ -110,7 +113,10 @@ def _kernel_signature(
             ConstantConstraint(physical_k),
         ],
         calling_convention=CallingConvention.cutile_python_v1(),
-    ).with_symbol(kernel_symbol(physical_k, matrix_layout, data_type))
+    ).with_symbol(
+        kernel_symbol(physical_k, matrix_layout, data_type)
+        + ("" if stage == "fused" else f"_{stage}")
+    )
 
 
 def export_binary(
@@ -126,7 +132,16 @@ def export_binary(
     gpu_code: str,
     matrix_layout: str = "strict",
     occupancy: int | None = None,
+    stage: str = "fused",
 ) -> str:
+    if stage != "fused" and (
+        gpu_code != "sm_120" or matrix_layout != "strict"
+    ):
+        raise ValueError("Staged exports currently support strict SM120 only")
+    if stage == "witness" and (data_type != "half" or physical_k != 4):
+        raise ValueError(
+            "Witness exports currently support native FP16 PK4 only"
+        )
     kernel = make_kernel(
         data_type,
         metric,
@@ -138,9 +153,18 @@ def export_binary(
         gpu_code=gpu_code,
         matrix_layout=matrix_layout,
         occupancy=occupancy,
+        stage="select" if stage == "witness" else stage,
+        witness=stage == "witness",
     )
     signature = _kernel_signature(
-        physical_k, tile_m, tile_n, tile_k, gpu_code, matrix_layout, data_type
+        physical_k,
+        tile_m,
+        tile_n,
+        tile_k,
+        gpu_code,
+        matrix_layout,
+        data_type,
+        stage,
     )
     export_kernel(
         kernel=kernel,
@@ -152,7 +176,7 @@ def export_binary(
     return signature.symbol
 
 
-def main() -> int:
+def main(default_stage: str = "fused") -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output_file", type=Path)
     parser.add_argument("--format", choices=("cubin",), default="cubin")
@@ -172,6 +196,11 @@ def main() -> int:
         "--matrix-layout", choices=("strict", "relaxed"), default="strict"
     )
     parser.add_argument("--occupancy", type=int)
+    parser.add_argument(
+        "--stage",
+        choices=("fused", "select", "refine", "witness"),
+        default=default_stage,
+    )
     args = parser.parse_args()
 
     export_binary(
@@ -186,6 +215,7 @@ def main() -> int:
         gpu_code=args.gpu_code,
         matrix_layout=args.matrix_layout,
         occupancy=args.occupancy,
+        stage=args.stage,
     )
     return 0
 

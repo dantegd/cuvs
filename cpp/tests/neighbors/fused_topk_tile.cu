@@ -2375,5 +2375,7 @@ INSTANTIATE_TEST_SUITE_P(
                     Pk4Case{4, 31, cuvs::distance::DistanceType::CosineExpanded, 2},
                     Pk4Case{4, 32, cuvs::distance::DistanceType::L2SqrtExpanded, 1}));
 
+#include "fused_topk_stage_test.cuh"
+
 }  // namespace
 }  // namespace cuvs::neighbors::detail

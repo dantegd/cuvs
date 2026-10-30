@@ -10,6 +10,7 @@
 
 #include "fused_topk_pk4_planner.hpp"
 #include "fused_topk_planner.hpp"
+#include "fused_topk_stage_planner.hpp"
 
 #include <cuvs/core/export.hpp>
 #include <cuvs/detail/jit_lto/cutile_module.hpp>
@@ -68,11 +69,50 @@ bool launch_fused_topk(int* neighbors,
   using Planner = std::conditional_t<PhysicalK == 2,
                                      FusedTopkPk2Planner<DataT, AbiTag>,
                                      FusedTopkPk4Planner<DataT, AbiTag>>;
-  Planner planner;
-  planner.add_entrypoint();
-  auto launcher = planner.try_get_launcher();
-  if (launcher == nullptr) { return false; }
-  const auto tile_cfg        = planner.tile_config();
+  std::shared_ptr<rtcx::algorithm_launcher> launcher;
+  std::shared_ptr<rtcx::algorithm_launcher> refine_launcher;
+  cuvs::detail::jit_lto::CutileTileConfig tile_cfg{};
+  if constexpr (std::is_same_v<AbiTag, cuvs::distance::detail::cutile_abi_strict>) {
+    // Preserve corpus splits and other architecture/ABI paths. Half PK2 uses
+    // one broad low-D fused region, never a per-shape benchmark lookup table.
+    if (fused_topk_separate_refinement_eligible<PhysicalK, DataT>(dimensions, num_splits)) {
+      cuvs::detail::jit_lto::CutileRuntimeCapabilities capabilities{};
+      if (cuvs::detail::jit_lto::query_current_cutile_runtime_capabilities(capabilities) &&
+          capabilities.cc_major == 12 && capabilities.cc_minor == 0) {
+        using Select = FusedTopkStagePlanner<PhysicalK, DataT, fused_topk_stage::select>;
+        using Refine = FusedTopkStagePlanner<PhysicalK, DataT, fused_topk_stage::refine>;
+        std::shared_ptr<rtcx::algorithm_launcher> selection;
+        if constexpr (PhysicalK == 4 && std::is_same_v<DataT, half>) {
+          if (num_splits == 1) {
+            FusedTopkStagePlanner<4, half, fused_topk_stage::witness> witness;
+            selection = witness.try_get_launcher();
+          } else {
+            Select select;
+            selection = select.try_get_launcher();
+          }
+        } else {
+          Select select;
+          selection = select.try_get_launcher();
+        }
+        Refine refine;
+        auto refinement = refine.try_get_launcher();
+        // Resolve both handles before any output writes. An unavailable stage
+        // falls back to the original fused kernel, never to a partial result.
+        if (selection && refinement) {
+          launcher        = std::move(selection);
+          refine_launcher = std::move(refinement);
+          tile_cfg        = {Select::tile_m, Select::tile_n, Select::tile_k};
+        }
+      }
+    }
+  }
+  if (!launcher) {
+    Planner planner;
+    planner.add_entrypoint();
+    launcher = planner.try_get_launcher();
+    if (!launcher) { return false; }
+    tile_cfg = planner.tile_config();
+  }
   const int num_corpus_tiles = fused_topk_pk2_ceil_div(corpus_rows, tile_cfg.tile_n);
   if (num_splits <= 0 || num_splits > num_corpus_tiles) { return false; }
 
@@ -102,8 +142,6 @@ bool launch_fused_topk(int* neighbors,
   int shape_distances[2]  = {query_rows, output_width};
   int stride_distances[2] = {output_width, 1};
 
-  dim3 grid(
-    (static_cast<uint64_t>(query_rows) + tile_cfg.tile_m - 1) / tile_cfg.tile_m, num_splits, 1);
   dim3 block(1, 1, 1);
 
   using fused_topk_cutile_kernel_t = void(void*,
@@ -131,36 +169,46 @@ bool launch_fused_topk(int* neighbors,
                                           int,
                                           int,
                                           int);
-  launcher->template dispatch<fused_topk_cutile_kernel_t>(stream,
-                                                          grid,
-                                                          block,
-                                                          0,
-                                                          query_ptr,
-                                                          shape_queries[0],
-                                                          shape_queries[1],
-                                                          stride_queries[0],
-                                                          stride_queries[1],
-                                                          corpus_ptr,
-                                                          shape_corpus[0],
-                                                          shape_corpus[1],
-                                                          stride_corpus[0],
-                                                          stride_corpus[1],
-                                                          index_ptr,
-                                                          shape_indices[0],
-                                                          shape_indices[1],
-                                                          stride_indices[0],
-                                                          stride_indices[1],
-                                                          distance_ptr,
-                                                          shape_distances[0],
-                                                          shape_distances[1],
-                                                          stride_distances[0],
-                                                          stride_distances[1],
-                                                          query_rows,
-                                                          corpus_rows,
-                                                          dimensions,
-                                                          metric_code,
-                                                          num_splits);
-  RAFT_CUDA_TRY(cudaGetLastError());
+  const auto dispatch = [&](const std::shared_ptr<rtcx::algorithm_launcher>& stage, int tile_m) {
+    dim3 grid((static_cast<uint64_t>(query_rows) + tile_m - 1) / tile_m, num_splits, 1);
+    stage->template dispatch<fused_topk_cutile_kernel_t>(stream,
+                                                         grid,
+                                                         block,
+                                                         0,
+                                                         query_ptr,
+                                                         shape_queries[0],
+                                                         shape_queries[1],
+                                                         stride_queries[0],
+                                                         stride_queries[1],
+                                                         corpus_ptr,
+                                                         shape_corpus[0],
+                                                         shape_corpus[1],
+                                                         stride_corpus[0],
+                                                         stride_corpus[1],
+                                                         index_ptr,
+                                                         shape_indices[0],
+                                                         shape_indices[1],
+                                                         stride_indices[0],
+                                                         stride_indices[1],
+                                                         distance_ptr,
+                                                         shape_distances[0],
+                                                         shape_distances[1],
+                                                         stride_distances[0],
+                                                         stride_distances[1],
+                                                         query_rows,
+                                                         corpus_rows,
+                                                         dimensions,
+                                                         metric_code,
+                                                         num_splits);
+    RAFT_CUDA_TRY(cudaGetLastError());
+  };
+  dispatch(launcher, tile_cfg.tile_m);
+  if (refine_launcher) {
+    // A separate query grid is essential when selection uses TM64 and
+    // refinement uses TM32; the partial-list stride remains num_splits*PK.
+    dispatch(refine_launcher,
+             FusedTopkStagePlanner<PhysicalK, DataT, fused_topk_stage::refine>::tile_m);
+  }
   return true;
 }
 

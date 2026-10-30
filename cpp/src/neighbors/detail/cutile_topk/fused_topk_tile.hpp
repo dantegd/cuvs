@@ -152,6 +152,20 @@ constexpr int fused_topk_public_num_splits(int query_rows, int corpus_rows, int 
 
 constexpr size_t fused_topk_align_workspace(size_t bytes) { return (bytes + 15) & ~size_t{15}; }
 
+// Separate refinement repays its extra launch only above the broad low-D
+// region for half PK2. Dimensions describe the actual (possibly padded) input.
+// Architecture and ABI eligibility are checked separately by the launcher.
+template <int PhysicalK, typename DataT>
+constexpr bool fused_topk_separate_refinement_eligible(int dimensions, int num_splits)
+{
+  static_assert(PhysicalK == 2 || PhysicalK == 4);
+  if (dimensions <= 0 || num_splits <= 0) { return false; }
+  if constexpr (PhysicalK == 4 && std::is_same_v<DataT, half>) { return true; }
+  if (num_splits == 1) { return false; }
+  if constexpr (PhysicalK == 2 && std::is_same_v<DataT, half>) { return dimensions > 64; }
+  return true;
+}
+
 // Overflow-safe ceil division for the 256-thread merge, with a bounded grid.
 // The kernel uses a 64-bit grid-stride loop independently of public index width.
 constexpr int fused_topk_merge_block_count(int query_rows)

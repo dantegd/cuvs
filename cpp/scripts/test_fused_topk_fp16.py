@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """CPU-only PK2/PK4 typed export contract; no compiler or device execution."""
 
+import ast
 import importlib.util
 import json
 from pathlib import Path
@@ -197,6 +198,45 @@ def test_producer_descriptor_width_is_not_public_index_width():
     )
 
 
+def assert_fp32_refinement(source):
+    """Both retained-value operands must be widened before metric arithmetic."""
+    loops = []
+    for node in ast.walk(ast.parse(source)):
+        if not isinstance(node, ast.For):
+            continue
+        assigned = {
+            target.id: statement.value
+            for statement in node.body
+            if isinstance(statement, ast.Assign)
+            for target in statement.targets
+            if isinstance(target, ast.Name)
+        }
+        if {"query_tile", "selected_values"} <= assigned.keys():
+            loops.append(assigned)
+    assert len(loops) == 1, "one retained-value refinement loop"
+    for name in ("query_tile", "selected_values"):
+        value = loops[0][name]
+        assert isinstance(value, ast.Call), name
+        assert (
+            isinstance(value.func, ast.Attribute)
+            and value.func.attr == "astype"
+        ), name
+        loaded = value.func.value
+        assert isinstance(loaded, ast.Call) and isinstance(
+            loaded.func, ast.Attribute
+        ), name
+        assert (
+            isinstance(loaded.func.value, ast.Name)
+            and loaded.func.value.id == "ct"
+        ), name
+        assert loaded.func.attr == (
+            "load" if name == "query_tile" else "gather"
+        ), name
+        assert len(value.args) == 1 and ast.dump(value.args[0]) == ast.dump(
+            ast.parse("ct.float32", mode="eval").body
+        ), name
+
+
 def test_fp32_widening_before_norm_and_refinement():
     source = (KERNEL / "fused_topk_kernel.py").read_text()
     assert (
@@ -205,7 +245,7 @@ def test_fp32_widening_before_norm_and_refinement():
     )
     assert "corpus_f32 = corpus_t.astype(ct.float32)" in source
     assert "corpus_f32 * corpus_f32" in source
-    assert ").astype(ct.float32)\n            if (" in source
+    assert_fp32_refinement(source)
     assert "delta = query_tile[:, None, :] - selected_values" in source
     assert "accumulator = ct.zeros((tm, tn), ct.float32)" in source
 
